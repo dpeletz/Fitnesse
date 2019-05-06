@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+android:padding="20dp">
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              app:layout_constraintLeft_toLeftOf="parent"
+              app:layout_constraintBaseline_toBaselineOf="parent"
+              android:id="@+id/tv_exercise_name"
+              android:text="@string/placeholder_name"/>
+
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintRight_toLeftOf="@id/tv_reps"
+            app:layout_constraintBaseline_toBaselineOf="parent"
+            android:text="@string/reps"
+    />
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              app:layout_constraintRight_toRightOf="parent"
+              app:layout_constraintBaseline_toBaselineOf="parent"
+              android:id="@+id/tv_reps"
+              android:text="@string/zero_placeholder"
+              android:layout_marginLeft="5dp"/>
+</android.support.constraint.ConstraintLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
@@ -9,15 +10,53 @@
     tools:context=".MainActivity">
 
     <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/activity_horizontal_margin"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:text="@string/title_home"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:id="@+id/tvTitle"
+            android:text="@string/fitnesse_caps"
+            android:textSize="30sp"
+            android:layout_marginTop="80dp"
+            android:textColor="@color/colorPrimaryDark"/>
+
+    <com.gc.materialdesign.views.ButtonRectangle
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            android:layout_margin="50dp"
+            android:text="@string/profile_caps"
+            android:id="@+id/btnProfile"
+            />
+
+    <com.gc.materialdesign.views.ButtonRectangle android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvTitle"
+            android:layout_margin="50dp"
+            android:text="@string/workouts_caps"
+            android:id="@+id/btnWorkouts"
+    />
+
+    <com.gc.materialdesign.views.ButtonRectangle android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnProfile"
+            android:layout_marginHorizontal="50dp"
+            android:text="@string/exercises_caps"
+            android:id="@+id/btnExercises"
+    />
+
+    <com.gc.materialdesign.views.ButtonRectangle android:layout_width="150dp"
+            android:layout_height="150dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/btnWorkouts"
+            android:layout_marginHorizontal="50dp"
+            android:text="@string/graphs_caps"
+            android:id="@+id/btnGraphs"
+    />
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/navigation"

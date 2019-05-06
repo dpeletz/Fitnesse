@@ -3,4 +3,21 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="fitnesse_caps">FITNESSE</string>
+    <string name="have_account_q">Do you have an account?</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="register">REGISTER</string>
+    <string name="don_t_have_account_q">Don\'t have an account?</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="workouts_caps">WORKOUTS</string>
+    <string name="exercises_caps">EXERCISES</string>
+    <string name="graphs_caps">GRAPHS</string>
+    <string name="zero_placeholder">0</string>
+    <string name="reps">Reps:</string>
+    <string name="placeholder_name">Placeholder Name</string>
+    <string name="edit">Edit</string>
+    <string name="profile_caps">PROFILE</string>
 </resources>
