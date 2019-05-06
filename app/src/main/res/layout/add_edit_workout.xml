@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/manageItemLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="20dp"
+        android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/name_text_input"
+            android:hint="string/item_name">
+
+        <android.support.design.widget.TextInputEditText
+                android:id="@+id/name_et"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="20dp">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="string/item_type"/>
+
+        <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:checkedButton="@+id/food"
+                android:orientation="horizontal"
+                android:id="@+id/radioGroup"
+        >
+            <RadioButton
+                    android:id="@+id/food"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="string/food_label"/>
+            <RadioButton
+                    android:id="@+id/electronic"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="string/electronic_label"/>
+            <RadioButton
+                    android:id="@+id/book"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="string/book_label"/>
+            <RadioButton
+                    android:id="@+id/travel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="string/travel_label"/>
+        </RadioGroup>
+    </LinearLayout>
+
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/price_text_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="string/estimated_price">
+
+        <android.support.design.widget.TextInputEditText
+                android:id="@+id/est_price_et"
+                android:inputType="numberDecimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:id="@+id/description_input"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="string/description">
+
+        <android.support.design.widget.TextInputEditText
+                android:id="@+id/description_et"
+                android:layout_width="match_parent"
+                android:maxLength="40"
+                android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
+
+    <CheckBox
+            android:id="@+id/isPurchasedCB"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="string/purchased"
+            android:layout_marginVertical="10dp"/>
+</LinearLayout>

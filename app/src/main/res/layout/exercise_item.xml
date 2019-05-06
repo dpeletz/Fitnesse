@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_view"
+        android:layout_margin="5dp">
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 android:layout_width="match_parent"
+                                                 xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_height="match_parent"
+                                                 android:id="@+id/exerciseItem">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercise Name"
+                android:id="@+id/name"
+                materialdesign:layout_constraintLeft_toLeftOf="@+id/exerciseItem"
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/exerciseItem"
+                android:paddingLeft="30dp"/>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                materialdesign:layout_constraintRight_toRightOf="@+id/exerciseItem"
+                materialdesign:layout_constraintLeft_toLeftOf="@+id/exerciseItem"
+                materialdesign:layout_constraintTop_toTopOf="@+id/exerciseItem"/>
+
+        <com.gc.materialdesign.views.ButtonIcon
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_edit_workout"
+                materialdesign:layout_constraintRight_toLeftOf="@+id/btn_delete_workout"
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/exerciseItem">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:src="@drawable/ic_mode_edit"
+            />
+        </com.gc.materialdesign.views.ButtonIcon>
+
+        <com.gc.materialdesign.views.ButtonIcon
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_delete_workout"
+                materialdesign:layout_constraintRight_toRightOf="@+id/exerciseItem"
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/exerciseItem"
+                android:paddingRight="30dp">
+            <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                       android:src="@drawable/ic_delete_sweep"
+            />
+        </com.gc.materialdesign.views.ButtonIcon>
+
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="2dp"
+                android:background="@color/colorPrimaryDark"
+                materialdesign:layout_constraintRight_toRightOf="@+id/exerciseItem"
+                materialdesign:layout_constraintLeft_toLeftOf="@+id/exerciseItem"
+                materialdesign:layout_constraintBottom_toBottomOf="@+id/exerciseItem"/>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
