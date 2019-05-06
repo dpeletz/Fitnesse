@@ -42,7 +42,6 @@ class WorkoutsAdapter : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder> {
         }
     }
 
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.name
         val btnView = itemView.btn_view_workout
