@@ -1,7 +1,7 @@
 package com.example.fitnesse.data
 
-import android.service.autofill.FillEventHistory
-import java.util.*
+import java.util.Date
+import java.util.Stack
 
 data class Workout(
     var workoutID: String,
