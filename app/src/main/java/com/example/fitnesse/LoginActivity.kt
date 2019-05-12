@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
-import android.view.View
 import android.widget.Toast
 import com.google.firebase.auth.UserProfileChangeRequest
 
@@ -75,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
                 "Login OK", Toast.LENGTH_LONG
             ).show()
 
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            startActivity(Intent(this@LoginActivity, GraphActivity::class.java))
         }.addOnFailureListener {
             Toast.makeText(
                 this@LoginActivity,

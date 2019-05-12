@@ -16,6 +16,8 @@
         </activity>
         <activity android:name=".ExercisesActivity">
         </activity>
+        <activity android:name=".GraphActivity">
+        </activity>
         <activity
                 android:name=".WorkoutsActivity"
                 android:label="Workouts"
