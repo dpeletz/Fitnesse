@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
                 "Login OK", Toast.LENGTH_LONG
             ).show()
 
-            startActivity(Intent(this@LoginActivity, GraphActivity::class.java))
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
         }.addOnFailureListener {
             Toast.makeText(
                 this@LoginActivity,
