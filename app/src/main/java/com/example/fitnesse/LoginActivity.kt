@@ -6,31 +6,24 @@ import android.support.v7.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_login.*
 import android.widget.Toast
+import com.example.fitnesse.data.User
 import com.google.firebase.auth.UserProfileChangeRequest
 
 class LoginActivity : AppCompatActivity() {
-
-//    private var mAuth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
         btnRegister.setOnClickListener {
-            //            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             registerClick()
-//            finish()
         }
-
-//        mAuth = FirebaseAuth.getInstance()
 
         /*
         TODO: update this with database login and such !!
          */
         btnSignIn.setOnClickListener {
-            //            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
             loginClick()
-//            finish()
         }
     }
 
@@ -69,6 +62,7 @@ class LoginActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(
             tilEmail.text.toString(), tilPassword.text.toString()
         ).addOnSuccessListener {
+
             Toast.makeText(
                 this@LoginActivity,
                 "Login OK", Toast.LENGTH_LONG

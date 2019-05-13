@@ -45,10 +45,10 @@ class ExercisesActivity : AppCompatActivity() {
 
             initExercises()
 
-            var listItems: List<Exercise> = listOf(
-                Exercise("exercise1", "user1", "Squat", false, 1),
-                Exercise("exercise2", "user1", "Bench Press", false, 2)
-            )
+//            var listItems: List<Exercise> = listOf(
+//                Exercise("exercise1", "user1", "Squat", false, 1),
+//                Exercise("exercise2", "user1", "Bench Press", false, 2)
+//            )
 //            var exercisesCollection = FirebaseFirestore.getInstance().collection(
 //                "exercises"
 //            )
@@ -66,6 +66,7 @@ class ExercisesActivity : AppCompatActivity() {
     }
 
     private fun addExercise() {
+        //TODO: link this up to correct information from an add exercise dialog or activity
         val exercise = Exercise(
             FirebaseAuth.getInstance().currentUser!!.uid,
             "1010221",

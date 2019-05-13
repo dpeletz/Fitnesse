@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
-import kotlinx.android.synthetic.main.exercise_item.view.*
 import kotlinx.android.synthetic.main.exercise_preview.view.*
 
 class WorkoutAdapter: RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
