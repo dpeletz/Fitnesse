@@ -30,4 +30,8 @@
     <string name="description">Description:</string>
     <string name="time_s">Time (s):</string>
     <string name="create_new_workout">Create New Workout</string>
+    <string name="timer">Timer</string>
+    <string name="profile">Profile</string>
+    <string name="dash">-</string>
+    <string name="add_exercise">Add Exercise</string>
 </resources>

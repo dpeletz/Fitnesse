@@ -13,15 +13,18 @@ class MainActivity : AppCompatActivity() {
             R.id.navigation_home -> {
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_dashboard -> {
+            R.id.navigation_timer -> {
+                // TODO: launch timer activity here
                 return@OnNavigationItemSelectedListener true
             }
-            R.id.navigation_notifications -> {
+            R.id.navigation_profile -> {
+                startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,5 +46,10 @@ class MainActivity : AppCompatActivity() {
         btnGraphs.setOnClickListener {
             startActivity(Intent(this@MainActivity, GraphActivity::class.java))
         }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        navigation.selectedItemId = R.id.navigation_home
     }
 }

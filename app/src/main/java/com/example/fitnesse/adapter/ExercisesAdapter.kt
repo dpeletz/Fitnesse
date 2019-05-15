@@ -1,6 +1,7 @@
 package com.example.fitnesse.adapter
 
 import android.content.Context
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
 class ExercisesAdapter(
@@ -82,5 +84,33 @@ class ExercisesAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.name
         val btnDeleteExercise = itemView.btn_delete_workout
+    }
+
+    fun updateExercise(index: Int) {
+        //TODO: implement
+    }
+
+    private fun editFragmentPopup(position: Int) {
+        val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
+            .inflate(R.layout.add_edit_workout, null)
+
+        view.tvAddEditPrompt.text = "Edit Exercise"
+        view.name_et.setText(exercises[position].name)
+        view.description_et.setText(exercises[position].description)
+
+        AlertDialog.Builder(context)
+            .setView(view)
+            .setPositiveButton("Update") {
+                    dialog, which ->
+                val name = view.name_et.text.toString()
+                val description = view.description_et.text.toString()
+                // TODO: give name and description to updateExercise so that the data can be saved
+                updateExercise(position)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") {
+                    dialog, which -> dialog.dismiss()
+            }
+            .show()
     }
 }

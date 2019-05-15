@@ -14,5 +14,6 @@ data class Workout(
     var history: ArrayList<Date> = ArrayList(),
     var totalReps: Int = -1,
     var totalSets: Int = -1,
-    var totalVolume: Int = -1
+    var totalVolume: Int = -1,
+    var description: String = ""
 )
