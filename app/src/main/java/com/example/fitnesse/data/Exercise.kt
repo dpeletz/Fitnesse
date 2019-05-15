@@ -8,6 +8,5 @@ data class Exercise(
     var value: Int = -1,
     var bodyweight: Boolean = true,
     var bodyPartCategory: Int = -1,
-    var description: String = "",
     var isMeasuredWithReps: Boolean
 )
