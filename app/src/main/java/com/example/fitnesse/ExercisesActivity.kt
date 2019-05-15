@@ -2,16 +2,16 @@ package com.example.fitnesse
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.example.fitnesse.adapter.ExercisesAdapter
-import com.example.fitnesse.adapter.WorkoutAdapter
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_exercises.*
-import kotlinx.android.synthetic.main.activity_workouts.recyclerList
-import kotlinx.android.synthetic.main.workout_item.*
+import kotlinx.android.synthetic.main.add_edit_exercise.*
+import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 
 class ExercisesActivity : AppCompatActivity() {
 
@@ -29,7 +29,7 @@ class ExercisesActivity : AppCompatActivity() {
         )
 
         btn_add_exercise.setOnClickListener {
-            addExercise()
+            addFragmentPopup()
         }
 
 //        btn_delete_exercise.setOnClickListener {
@@ -129,6 +129,29 @@ class ExercisesActivity : AppCompatActivity() {
                     }
                 }
             })
+    }
+
+    private fun addFragmentPopup() {
+        val view = layoutInflater.inflate(R.layout.add_edit_exercise, null)
+
+        AlertDialog.Builder(this)
+            .setView(view)
+            .setPositiveButton("Done") {
+                    dialog, which ->
+                val name = view.name_et.text.toString()
+                val description = view.description_et.text.toString()
+                val radioButton = view.radioGroup.checkedRadioButtonId
+                val time = view.secs_et.text.toString()
+                val reps = view.reps_et.text.toString()
+                // TODO: give values to addExercise so that the data can be saved
+                // TODO: also should we check for empty edit texts?
+                addExercise()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") {
+                    dialog, which -> dialog.dismiss()
+            }
+            .show()
     }
 
 

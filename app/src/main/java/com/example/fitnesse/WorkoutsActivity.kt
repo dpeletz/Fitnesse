@@ -2,6 +2,7 @@ package com.example.fitnesse
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.example.fitnesse.adapter.WorkoutsAdapter
@@ -13,6 +14,8 @@ import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
 import kotlinx.android.synthetic.main.activity_workouts.*
 import kotlinx.android.synthetic.main.activity_workouts.recyclerList
+import kotlinx.android.synthetic.main.add_edit_workout.*
+import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import java.util.*
 
 class WorkoutsActivity : AppCompatActivity() {
@@ -31,7 +34,7 @@ class WorkoutsActivity : AppCompatActivity() {
         )
 
         btn_add_workout.setOnClickListener {
-            addWorkout()
+            addFragmentPopup()
         }
 
     }
@@ -156,6 +159,26 @@ class WorkoutsActivity : AppCompatActivity() {
                     }
                 }
             })
+    }
+
+    private fun addFragmentPopup() {
+        val view = layoutInflater.inflate(R.layout.add_edit_workout, null)
+
+        AlertDialog.Builder(this)
+            .setView(view)
+            .setPositiveButton("Done") {
+                    dialog, which ->
+                val name = view.name_et.text.toString()
+                val description = view.description_et.text.toString()
+                // TODO: give name and description to addWorkout so that the data can be saved
+                // TODO: could not figure out how to check for empty input texts :(
+                addWorkout()
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") {
+                    dialog, which -> dialog.dismiss()
+            }
+            .show()
     }
 
 

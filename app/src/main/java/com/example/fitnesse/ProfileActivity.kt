@@ -37,5 +37,6 @@ class ProfileActivity : AppCompatActivity() {
             editText.setTextIsSelectable(editMode)
         }
         btnEdit.text = if (!editMode) "edit" else "save"
+        // TODO: store changes in firebase
     }
 }
