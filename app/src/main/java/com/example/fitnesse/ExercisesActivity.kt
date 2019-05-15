@@ -9,9 +9,12 @@ import com.example.fitnesse.adapter.ExercisesAdapter
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
 import kotlinx.android.synthetic.main.add_edit_exercise.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
+import kotlinx.android.synthetic.main.exercise_item.*
+import java.util.*
 
 class ExercisesActivity : AppCompatActivity() {
 
@@ -65,12 +68,20 @@ class ExercisesActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun addExercise() {
+    private fun getExerciseUUID(): String {
+        var string_UUID = UUID.randomUUID().toString()
+        return string_UUID
+    }
+
+    private fun addExercise(name: String, description: String, radioButton: Int) {
+
         //TODO: link this up to correct information from an add exercise dialog or activity
         val exercise = Exercise(
             FirebaseAuth.getInstance().currentUser!!.uid,
-            "1010221",
-            "Bench Press",
+            getExerciseUUID(),
+            name,
+            description,
+            radioButton,
             false,
             2
         )
@@ -96,7 +107,6 @@ class ExercisesActivity : AppCompatActivity() {
         }
 
     }
-
 
     private fun initExercises() {
         val db = FirebaseFirestore.getInstance()
@@ -136,8 +146,7 @@ class ExercisesActivity : AppCompatActivity() {
 
         AlertDialog.Builder(this)
             .setView(view)
-            .setPositiveButton("Done") {
-                    dialog, which ->
+            .setPositiveButton("Done") { dialog, which ->
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 val radioButton = view.radioGroup.checkedRadioButtonId
@@ -145,11 +154,11 @@ class ExercisesActivity : AppCompatActivity() {
                 val reps = view.reps_et.text.toString()
                 // TODO: give values to addExercise so that the data can be saved
                 // TODO: also should we check for empty edit texts?
-                addExercise()
+                addExercise(name, description, radioButton)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") {
-                    dialog, which -> dialog.dismiss()
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
             }
             .show()
     }

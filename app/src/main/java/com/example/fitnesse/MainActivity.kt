@@ -14,6 +14,7 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_dashboard -> {
+                startActivity(Intent(this@MainActivity, StopwatchActivity::class.java))
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_notifications -> {
