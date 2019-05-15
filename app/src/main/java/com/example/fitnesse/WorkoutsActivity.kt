@@ -74,6 +74,8 @@ class WorkoutsActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().currentUser!!.uid,
             "1010221",
             "Bench Press",
+            "",
+            0,
             false,
             2
         )
@@ -166,8 +168,7 @@ class WorkoutsActivity : AppCompatActivity() {
 
         AlertDialog.Builder(this)
             .setView(view)
-            .setPositiveButton("Done") {
-                    dialog, which ->
+            .setPositiveButton("Done") { dialog, which ->
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 // TODO: give name and description to addWorkout so that the data can be saved
@@ -175,8 +176,8 @@ class WorkoutsActivity : AppCompatActivity() {
                 addWorkout()
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") {
-                    dialog, which -> dialog.dismiss()
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
             }
             .show()
     }
