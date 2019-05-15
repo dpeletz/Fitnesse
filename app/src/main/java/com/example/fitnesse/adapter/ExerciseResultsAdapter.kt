@@ -6,22 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.fitnesse.R
-import com.example.fitnesse.data.Exercise
+import com.example.fitnesse.data.ExerciseResult
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
-class ExercisesAdapter(
+class ExerciseResultsAdapter(
     private val context: Context,
     private val uId: String
-) : RecyclerView.Adapter<ExercisesAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ExerciseResultsAdapter.ViewHolder>() {
 
 //    private val context: Context
 //class ExercisesAdapter : RecyclerView.Adapter<ExercisesAdapter.ViewHolder> {
 //
 //    private val context: Context
 
-    private var exercises = mutableListOf<Exercise>()
-    private var exerciseKeys = mutableListOf<String>()
+    private var exerciseResults = mutableListOf<ExerciseResult>()
+    private var exerciseResultKeys = mutableListOf<String>()
 
     // must call super in constructor as well
 //    constructor(context: Context, exerciseItems: List<Exercise>) : super() {
@@ -37,50 +37,46 @@ class ExercisesAdapter(
     }
 
     override fun getItemCount(): Int {
-        return exercises.size
+        return exerciseResults.size
     }
 
 
-    fun addExercise(exercise: Exercise, key: String) {
-        exercises.add(exercise)
-        exerciseKeys.add(key)
+    fun addExerciseResult(exerciseResult: ExerciseResult, key: String) {
+        exerciseResults.add(exerciseResult)
+        exerciseResultKeys.add(key)
         notifyDataSetChanged()
     }
 
-    fun removeExercise(index: Int) {
-        FirebaseFirestore.getInstance().collection("exercises").document(
-            exerciseKeys[index]
+    fun removeExerciseResult(index: Int) {
+        FirebaseFirestore.getInstance().collection("exerciseResults").document(
+            exerciseResultKeys[index]
         ).delete()
 
-        exercises.removeAt(index)
-        exerciseKeys.removeAt(index)
+        exerciseResults.removeAt(index)
+        exerciseResultKeys.removeAt(index)
         notifyItemRemoved(index)
     }
 
-    fun removeExerciseByKey(key: String) {
-        val index = exerciseKeys.indexOf(key)
+    fun removeExerciseResultByKey(key: String) {
+        val index = exerciseResultKeys.indexOf(key)
         if (index != -1) {
-            exercises.removeAt(index)
-            exerciseKeys.removeAt(index)
+            exerciseResults.removeAt(index)
+            exerciseResultKeys.removeAt(index)
             notifyItemRemoved(index)
         }
     }
 
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val exercise = exercises[position]
+        val exerciseResult = exerciseResults[position]
 
-        viewHolder.name.text = exercise.name
-        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
-
-        viewHolder.btnDeleteExercise.setOnClickListener {
-            removeExercise(viewHolder.adapterPosition)
-        }
+//        viewHolder.name.text = exerciseResult.name
+//        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.name
-        val btnDeleteExercise = itemView.btn_delete_workout
+//        val name = itemView.name
+//        val btnDeleteExercise = itemView.btn_delete_exercise
     }
 }

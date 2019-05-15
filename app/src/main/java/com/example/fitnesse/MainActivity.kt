@@ -29,12 +29,19 @@ class MainActivity : AppCompatActivity() {
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
-        btnWorkouts.setOnClickListener{
+        btnWorkouts.setOnClickListener {
             startActivity(Intent(this@MainActivity, WorkoutsActivity::class.java))
         }
 
         btnExercises.setOnClickListener {
             startActivity(Intent(this@MainActivity, ExercisesActivity::class.java))
+        }
+
+        btnProfile.setOnClickListener {
+            startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
+        }
+        btnGraphs.setOnClickListener {
+            startActivity(Intent(this@MainActivity, GraphActivity::class.java))
         }
     }
 }

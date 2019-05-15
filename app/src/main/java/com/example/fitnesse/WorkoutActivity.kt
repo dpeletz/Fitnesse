@@ -25,7 +25,7 @@ class WorkoutActivity : AppCompatActivity() {
             TODO: incorporate Firebase here
              */
             var listItems : List<Exercise> = listOf(
-                Exercise("hi", 0, 0)
+                Exercise("exercise3", "user1", "Bench Press", false, 2)
             )
 
             runOnUiThread {

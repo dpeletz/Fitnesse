@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical"
+              android:padding="30dp">
+    <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="400dp" />
+</LinearLayout>
+        <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+              <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+              <!--xmlns:tools="http://schemas.android.com/tools"-->
+              <!--android:layout_width="match_parent"-->
+              <!--android:layout_height="match_parent"-->
+              <!--tools:context="com.example.fitnesse.GraphActivity">-->
+
+    <!--&lt;!&ndash;<com.github.mikephil.charting.charts.LineChart&ndash;&gt;-->
+            <!--&lt;!&ndash;android:id="@+id/chart"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="match_parent"></com.github.mikephil.charting.charts.LineChart>&ndash;&gt;-->
+    <!--<com.github.mikephil.charting.charts.LineChart-->
+            <!--android:id="@+id/lineChart"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent" />-->
+
+<!--</LinearLayout>-->

@@ -1,7 +1,9 @@
 package com.example.fitnesse.data
 
-data class Exercise (
-    var name : String,
-    var time : Int,
-    var reps : Int
+data class Exercise(
+    var userID: String = "",
+    var exerciseID: String = "",
+    var name: String = "",
+    var bodyweight: Boolean = true,
+    var bodyPartCategory: Int = -1
 )

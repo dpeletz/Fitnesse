@@ -9,18 +9,25 @@ import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.WorkoutActivity
 import com.example.fitnesse.data.Workout
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.workout_item.view.*
 
-class WorkoutsAdapter : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder> {
-    var workouts = mutableListOf<Workout>()
+class WorkoutsAdapter(
+    private val context: Context,
+    private val uId: String
+) : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder>() {
 
-    private val context: Context
+    //class WorkoutsAdapter : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder> {
+    private var workouts = mutableListOf<Workout>()
+    private var workoutKeys = mutableListOf<String>()
+
+//    private val context: Context
 
     // must call super in constructor as well
-    constructor(context: Context, workoutItems : List<Workout>) : super() {
-        this.context = context
-        workouts.addAll(workoutItems)
-    }
+//    constructor(context: Context, workoutItems: List<Workout>) : super() {
+//        this.context = context
+//        workouts.addAll(workoutItems)
+//    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         var itemRowView = LayoutInflater.from(context).inflate(
@@ -40,11 +47,43 @@ class WorkoutsAdapter : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder> {
         viewHolder.btnView.setOnClickListener {
             context.startActivity(Intent(context, WorkoutActivity::class.java))
         }
+        viewHolder.btnDeleteWorkout.setOnClickListener {
+            removeWorkout(viewHolder.adapterPosition)
+        }
     }
-
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.name
         val btnView = itemView.btn_view_workout
+
+        val btnDeleteWorkout = itemView.btn_delete_workout
     }
+
+
+    fun removeWorkoutByKey(key: String) {
+        val index = workoutKeys.indexOf(key)
+        if (index != -1) {
+            workouts.removeAt(index)
+            workoutKeys.removeAt(index)
+            notifyItemRemoved(index)
+        }
+    }
+
+    fun addWorkout(workout: Workout, key: String) {
+        workouts.add(workout)
+        workoutKeys.add(key)
+        notifyDataSetChanged()
+    }
+
+    fun removeWorkout(index: Int) {
+        FirebaseFirestore.getInstance().collection("workouts").document(
+            workoutKeys[index]
+        ).delete()
+
+        workouts.removeAt(index)
+        workoutKeys.removeAt(index)
+        notifyItemRemoved(index)
+    }
+
+
 }
