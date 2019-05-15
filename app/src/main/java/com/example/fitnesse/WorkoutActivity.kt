@@ -33,7 +33,6 @@ class WorkoutActivity : AppCompatActivity() {
 
                 recyclerList.layoutManager = LinearLayoutManager(this)
                 recyclerList.adapter = workoutAdapter
-                Log.d("tag check", "ho")
             }
 
         }.start()

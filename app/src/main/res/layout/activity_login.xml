@@ -40,6 +40,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:hint="@string/email"
+            android:text="caroline.e.okun@gmail.com"
             android:inputType="textEmailAddress"
             android:id="@+id/tilEmail">
     </com.rengwuxian.materialedittext.MaterialEditText>
@@ -53,6 +54,7 @@
             android:layout_marginHorizontal="20dp"
             android:inputType="textPassword"
             android:hint="@string/password"
+            android:text="12345678"
             android:id="@+id/tilPassword">
     </com.rengwuxian.materialedittext.MaterialEditText>
 
