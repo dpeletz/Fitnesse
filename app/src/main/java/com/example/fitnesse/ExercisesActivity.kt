@@ -83,13 +83,18 @@ class ExercisesActivity : AppCompatActivity() {
             description,
             radioButton,
             false,
-            2,
-            false
+            2, true
         )
 
-        var exercisesCollection = FirebaseFirestore.getInstance().collection(
-            "exercises"
-        )
+//        var exercisesCollection = FirebaseFirestore.getInstance().collection(
+//            "exercises"
+//        )
+        var exercisesCollection =
+            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .collection("exercises")
+//        var exercisesCollection = FirebaseFirestore.getInstance().collection("users").document("exercises")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+
 
         exercisesCollection.add(
             exercise
@@ -112,7 +117,17 @@ class ExercisesActivity : AppCompatActivity() {
     private fun initExercises() {
         val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("exercises")
+//        val query = db.collection("users").document("exercises")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+        val query = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("exercises")
+
+////        val query = db.collection("exercises")
+//        var userId = FirebaseAuth.getInstance().currentUser!!.uid
+//        println(userId)
+////        println(FirebaseAuth.getInstance().docu)
+//        println("----------")
+//        val usersQuery = db.collection("users")
 
         var allExercisesListener = query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {

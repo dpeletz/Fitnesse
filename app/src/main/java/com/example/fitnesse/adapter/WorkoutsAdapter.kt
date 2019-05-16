@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import kotlinx.android.synthetic.main.workout_item.view.*
 import android.support.v4.content.ContextCompat.getSystemService
 import com.example.fitnesse.R
+import com.google.firebase.auth.FirebaseAuth
 
 
 class WorkoutsAdapter(
@@ -21,17 +22,8 @@ class WorkoutsAdapter(
     private val uId: String
 ) : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder>() {
 
-    //class WorkoutsAdapter : RecyclerView.Adapter<WorkoutsAdapter.ViewHolder> {
     private var workouts = mutableListOf<Workout>()
     private var workoutKeys = mutableListOf<String>()
-
-//    private val context: Context
-
-    // must call super in constructor as well
-//    constructor(context: Context, workoutItems: List<Workout>) : super() {
-//        this.context = context
-//        workouts.addAll(workoutItems)
-//    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         var itemRowView = LayoutInflater.from(context).inflate(
@@ -55,7 +47,7 @@ class WorkoutsAdapter(
             removeWorkout(viewHolder.adapterPosition)
         }
 
-        viewHolder.btnEditWorkout.setOnClickListener{
+        viewHolder.btnEditWorkout.setOnClickListener {
             editFragmentPopup(position)
         }
     }
@@ -85,9 +77,10 @@ class WorkoutsAdapter(
     }
 
     fun removeWorkout(index: Int) {
-        FirebaseFirestore.getInstance().collection("workouts").document(
-            workoutKeys[index]
-        ).delete()
+
+        FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("workouts").document(workoutKeys[index]).delete()
 
         workouts.removeAt(index)
         workoutKeys.removeAt(index)
@@ -108,16 +101,15 @@ class WorkoutsAdapter(
 
         AlertDialog.Builder(context)
             .setView(view)
-            .setPositiveButton("Update") {
-                    dialog, which ->
+            .setPositiveButton("Update") { dialog, which ->
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 // TODO: give name and description to addWorkout so that the data can be saved
                 updateWorkout(position)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") {
-                    dialog, which -> dialog.dismiss()
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
             }
             .show()
     }

@@ -63,12 +63,25 @@ class LoginActivity : AppCompatActivity() {
             tilEmail.text.toString(), tilPassword.text.toString()
         ).addOnSuccessListener {
 
+
             Toast.makeText(
                 this@LoginActivity,
                 "Login OK", Toast.LENGTH_LONG
             ).show()
 
-            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//            val user = User(
+//                email = tilEmail.text.toString(),
+//                password = tilPassword.text.toString()
+//            )
+
+
+//            val intent = Intent(this@LoginActivity, MainActivity::class.java)
+//            intent.putExtra("email", tilEmail.text.toString())
+//            intent.putExtra("password", tilPassword.text.toString())
+
+            startActivity(
+                Intent(this@LoginActivity, MainActivity::class.java)
+            )
         }.addOnFailureListener {
             Toast.makeText(
                 this@LoginActivity,

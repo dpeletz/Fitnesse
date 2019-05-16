@@ -69,7 +69,17 @@ class WorkoutsActivity : AppCompatActivity() {
         }.start()
     }
 
-    private fun addWorkout() {
+    private fun getWorkoutUUID(): String {
+        var string_UUID = UUID.randomUUID().toString()
+        return string_UUID
+    }
+
+    private fun addWorkout(name: String, description: String) {
+
+//        val exercise = FirebaseFirestore.getInstance().collection("users").document("exercises")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+
+        //TODO: CHANGE THIS FROM BEING HARD CODED!
         val exercise = Exercise(
             FirebaseAuth.getInstance().currentUser!!.uid,
             "1010221",
@@ -77,41 +87,46 @@ class WorkoutsActivity : AppCompatActivity() {
             "",
             0,
             false,
-            2,
-            false
+            2, true
         )
 
         val exerciseList = listOf(exercise)
+
+        //TODO: CHANGE THE HISTORY STACK
         val historyStack = Stack<Date>()
         historyStack.push(Date(2019, 5, 5))
 
         //TODO: link this up to correct information from an add workout dialog or activity
-        val workout = Workout(
-            FirebaseAuth.getInstance().currentUser!!.uid,
-            "WORKOUT_ID",
-            "WORKOUT_NAME",
-            exerciseList,
-            55F,
-            arrayListOf(Date(2019, 5, 5)),
-            1,
-            1,
-            1
-        )
 //        val workout = Workout(
 //            FirebaseAuth.getInstance().currentUser!!.uid,
 //            "WORKOUT_ID",
 //            "WORKOUT_NAME",
 //            exerciseList,
 //            55F,
-//            historyStack,
+//            arrayListOf(Date(2019, 5, 5)),
 //            1,
 //            1,
 //            1
 //        )
-
-        var workoutsCollection = FirebaseFirestore.getInstance().collection(
-            "workouts"
+        val workout = Workout(
+            FirebaseAuth.getInstance().currentUser!!.uid,
+            getWorkoutUUID(),
+            name,
+            exerciseList,
+            55F,
+            arrayListOf(Date(2019, 5, 5)),
+            1,
+            1,
+            1,
+            description
         )
+
+        var workoutsCollection = FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("workouts")
+//        var workoutsCollection = FirebaseFirestore.getInstance().collection("users").document("workouts")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+
 
         workoutsCollection.add(
             workout
@@ -134,7 +149,13 @@ class WorkoutsActivity : AppCompatActivity() {
     private fun initWorkouts() {
         val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("workouts")
+//        val query = db.collection("workouts")
+//        val query = db.collection("users").document("workouts")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+        var query = db.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("workouts")
+
 
         var allWorkoutsListener = query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
@@ -174,7 +195,7 @@ class WorkoutsActivity : AppCompatActivity() {
                 val description = view.description_et.text.toString()
                 // TODO: give name and description to addWorkout so that the data can be saved
                 // TODO: could not figure out how to check for empty input texts :(
-                addWorkout()
+                addWorkout(name, description)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->

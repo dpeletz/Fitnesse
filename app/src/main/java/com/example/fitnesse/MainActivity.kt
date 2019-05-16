@@ -4,12 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
+import com.example.fitnesse.data.User
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-
-
+//    public lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +32,8 @@ class MainActivity : AppCompatActivity() {
         btnGraphs.setOnClickListener {
             startActivity(Intent(this@MainActivity, GraphActivity::class.java))
         }
+
+//        user.email = tilEmail.text.toString()
     }
 
     override fun onRestart() {
