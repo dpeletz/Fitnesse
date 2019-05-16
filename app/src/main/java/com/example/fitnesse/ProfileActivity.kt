@@ -35,6 +35,23 @@ class ProfileActivity : AppCompatActivity() {
 
         switchEditMode()
 
+//        if (user.gender != -1) {
+//            println("TRUE")
+//            println("-----")
+//            etGender.setText(genderArray.get(user.gender))
+//        }
+//        if (user.age != -1) {
+//            println("TRUE")
+//            println("-----")
+//            etAge.setText(user.age.toString())
+//        }
+//        if (user.height != -1F) {
+//            etHeight.setText(user.height.toString())
+//        }
+//        if (user.weight != -1F) {
+//            etWeight.setText(user.weight.toString())
+//        }
+
         btnEdit.setOnClickListener {
             if (btnEdit.text == "save") {
                 sendValuesToFirebase()

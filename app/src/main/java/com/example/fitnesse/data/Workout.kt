@@ -8,7 +8,6 @@ data class Workout(
     var workoutID: String = "",
     var name: String = "",
     var exercises: List<Exercise> = listOf(Exercise()),
-    var duration: Float = -1F,
 //    var history: Stack<Date> = Stack(),
     //TODO: change this back to the Stack for history
     var history: ArrayList<Date> = ArrayList(),

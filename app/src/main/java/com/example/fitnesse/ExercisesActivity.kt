@@ -168,9 +168,16 @@ class ExercisesActivity : AppCompatActivity() {
                 val radioButton = view.radioGroup.checkedRadioButtonId
                 val time = view.secs_et.text.toString()
                 val reps = view.reps_et.text.toString()
+                addExercise(name, description, radioButton)
+
+//                if (radioButton == 1) {
+//                    addExercise(name, description, radioButton)
+//                }
+//                if (radioButton == 2) {
+//                    addExercise(name, description, radioButton)
+//                }
                 // TODO: give values to addExercise so that the data can be saved
                 // TODO: also should we check for empty edit texts?
-                addExercise(name, description, radioButton)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->

@@ -8,7 +8,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 object ManageBottomNavbar {
 
-    fun setupNavbar(context : Context, navigation: BottomNavigationView) {
+    fun setupNavbar(context: Context, navigation: BottomNavigationView) {
         val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
