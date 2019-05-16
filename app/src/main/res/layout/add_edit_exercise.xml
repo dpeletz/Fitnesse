@@ -13,6 +13,7 @@
             android:layout_height="wrap_content"
             android:text="@string/create_new_exercise"
             android:textSize="20dp"
+            android:id="@+id/tvAddEditPrompt"
     />
 
     <android.support.design.widget.TextInputLayout

@@ -8,11 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
-import kotlinx.android.synthetic.main.add_edit_workout.view.*
-import kotlinx.android.synthetic.main.add_edit_workout.view.description_et
-import kotlinx.android.synthetic.main.add_edit_workout.view.name_et
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
 class ExercisesAdapter(
@@ -20,19 +18,8 @@ class ExercisesAdapter(
     private val uId: String
 ) : RecyclerView.Adapter<ExercisesAdapter.ViewHolder>() {
 
-//    private val context: Context
-//class ExercisesAdapter : RecyclerView.Adapter<ExercisesAdapter.ViewHolder> {
-//
-//    private val context: Context
-
     private var exercises = mutableListOf<Exercise>()
     private var exerciseKeys = mutableListOf<String>()
-
-    // must call super in constructor as well
-//    constructor(context: Context, exerciseItems: List<Exercise>) : super() {
-//        this.context = context
-//        exercises.addAll(exerciseItems)
-//    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
         var itemRowView = LayoutInflater.from(context).inflate(
@@ -53,9 +40,9 @@ class ExercisesAdapter(
     }
 
     fun removeExercise(index: Int) {
-        FirebaseFirestore.getInstance().collection("exercises").document(
-            exerciseKeys[index]
-        ).delete()
+        FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("exercises").document(exerciseKeys[index]).delete()
 
         exercises.removeAt(index)
         exerciseKeys.removeAt(index)
@@ -81,12 +68,17 @@ class ExercisesAdapter(
         viewHolder.btnDeleteExercise.setOnClickListener {
             removeExercise(viewHolder.adapterPosition)
         }
+
+        viewHolder.btmEditExercise.setOnClickListener{
+            editFragmentPopup(position)
+        }
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.name
         val btnDeleteExercise = itemView.btn_delete_workout
+        val btmEditExercise = itemView.btn_edit_workout
     }
 
     fun updateExercise(index: Int) {
@@ -95,28 +87,29 @@ class ExercisesAdapter(
 
     private fun editFragmentPopup(position: Int) {
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
-            .inflate(R.layout.add_edit_workout, null)
+            .inflate(R.layout.add_edit_exercise, null)
 
         view.tvAddEditPrompt.text = "Edit Exercise"
         view.name_et.setText(exercises[position].name)
         view.description_et.setText(exercises[position].description)
         if (exercises[position].isMeasuredWithReps) {
-            view.radioGroup.check(R.id.rb_secs)
-            view.reps_et.setText(exercises[position].value)
+            view.radioGroup.check(view.rb_reps.id)
+            view.reps_et.setText(exercises[position].value.toString())
+        } else {
+            view.secs_et.setText(exercises[position].value.toString())
         }
 
         AlertDialog.Builder(context)
             .setView(view)
-            .setPositiveButton("Update") {
-                    dialog, which ->
+            .setPositiveButton("Update") { dialog, which ->
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 // TODO: give name and description to updateExercise so that the data can be saved
                 updateExercise(position)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") {
-                    dialog, which -> dialog.dismiss()
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
             }
             .show()
     }

@@ -11,6 +11,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
+import kotlinx.android.synthetic.main.activity_exercises.navigation
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.add_edit_exercise.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.exercise_item.*
@@ -23,6 +25,8 @@ class ExercisesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_exercises)
+
+        ManageBottomNavbar.setupNavbar(this@ExercisesActivity, navigation)
 
         populateExerciseItems()
 
@@ -83,13 +87,18 @@ class ExercisesActivity : AppCompatActivity() {
             description,
             radioButton,
             false,
-            2,
-            false
+            2, true
         )
 
-        var exercisesCollection = FirebaseFirestore.getInstance().collection(
-            "exercises"
-        )
+//        var exercisesCollection = FirebaseFirestore.getInstance().collection(
+//            "exercises"
+//        )
+        var exercisesCollection =
+            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .collection("exercises")
+//        var exercisesCollection = FirebaseFirestore.getInstance().collection("users").document("exercises")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+
 
         exercisesCollection.add(
             exercise
@@ -112,7 +121,17 @@ class ExercisesActivity : AppCompatActivity() {
     private fun initExercises() {
         val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("exercises")
+//        val query = db.collection("users").document("exercises")
+//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+        val query = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("exercises")
+
+////        val query = db.collection("exercises")
+//        var userId = FirebaseAuth.getInstance().currentUser!!.uid
+//        println(userId)
+////        println(FirebaseAuth.getInstance().docu)
+//        println("----------")
+//        val usersQuery = db.collection("users")
 
         var allExercisesListener = query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
@@ -153,9 +172,16 @@ class ExercisesActivity : AppCompatActivity() {
                 val radioButton = view.radioGroup.checkedRadioButtonId
                 val time = view.secs_et.text.toString()
                 val reps = view.reps_et.text.toString()
+                addExercise(name, description, radioButton)
+
+//                if (radioButton == 1) {
+//                    addExercise(name, description, radioButton)
+//                }
+//                if (radioButton == 2) {
+//                    addExercise(name, description, radioButton)
+//                }
                 // TODO: give values to addExercise so that the data can be saved
                 // TODO: also should we check for empty edit texts?
-                addExercise(name, description, radioButton)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->

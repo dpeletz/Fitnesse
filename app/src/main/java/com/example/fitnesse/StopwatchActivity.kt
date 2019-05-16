@@ -13,6 +13,8 @@ class StopwatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
 
+        ManageBottomNavbar.setupNavbar(this@StopwatchActivity, navigation)
+
         btnMark.setOnClickListener {
             var now = System.currentTimeMillis()
             createTimeEntry(now)
@@ -20,11 +22,10 @@ class StopwatchActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener {
             enabled = true
-            MyThread().start()
 
             mainTimer = Timer()
 
-            mainTimer.schedule(MyTimerTask(), 0, 7000)
+            mainTimer.schedule(MyTimerTask(), 0, 100)
         }
 
         btnStop.setOnClickListener {
@@ -57,20 +58,12 @@ class StopwatchActivity : AppCompatActivity() {
     var lastElapsedTime = "0:0.0"
     private var enabled = false
 
-    inner class MyThread : Thread() {
-        override fun run() {
-            var now = System.currentTimeMillis()
-            while (enabled) {
-                runOnUiThread {
-                    tvStopwatch.text = getTimeToDisplay(old = now)
-                }
-            }
-        }
-    }
 
     inner class MyTimerTask : TimerTask() {
+        var now = System.currentTimeMillis()
         override fun run() {
             runOnUiThread {
+                tvStopwatch.text = getTimeToDisplay(old = now)
             }
         }
     }
@@ -99,9 +92,12 @@ class StopwatchActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
+        if (enabled) {
+            mainTimer.cancel()
+        }
         enabled = false
 
-        mainTimer.cancel()
+
     }
 
 }

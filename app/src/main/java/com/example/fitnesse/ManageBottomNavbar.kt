@@ -3,12 +3,10 @@ package com.example.fitnesse
 import android.content.Context
 import android.content.Intent
 import android.support.design.widget.BottomNavigationView
-import android.support.v4.content.ContextCompat.startActivity
-import kotlinx.android.synthetic.main.activity_main.*
 
 object ManageBottomNavbar {
 
-    fun setupNavbar(context : Context, navigation: BottomNavigationView) {
+    fun setupNavbar(context: Context, navigation: BottomNavigationView) {
         val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
@@ -30,10 +28,15 @@ object ManageBottomNavbar {
             false
         }
 
-        when(context) {
-
+        if (context is MainActivity) {
+            navigation.selectedItemId = R.id.navigation_home
+        } else if (context is StopwatchActivity) {
+            navigation.selectedItemId = R.id.navigation_timer
+        } else if (context is ProfileActivity) {
+            navigation.selectedItemId = R.id.navigation_profile
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+
     }
 }

@@ -6,6 +6,10 @@ import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.example.fitnesse.adapter.WorkoutAdapter
 import com.example.fitnesse.data.Exercise
+import com.example.fitnesse.data.User
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_workout.*
 
 class WorkoutActivity : AppCompatActivity() {
@@ -24,9 +28,23 @@ class WorkoutActivity : AppCompatActivity() {
             /*
             TODO: incorporate Firebase here
              */
-            var listItems: List<Exercise> = listOf(
-                Exercise("exercise3", "user1", "Bench Press", "", 0, false, 2, false)
-            )
+//            var listItems: List<Exercise> = listOf(
+//                Exercise("exercise3", "user1", "Bench Press", "", 0, false, 2, false)
+//            )
+            var exercisesCollection =
+                FirebaseFirestore.getInstance().collection("users")
+                    .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                    .collection("exercises")
+
+            var listItems: List<Exercise> =
+                listOf(Exercise(userID = FirebaseAuth.getInstance().currentUser!!.uid, name = "chest press"))
+
+//            exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
+//                val exercise = documentSnapshot.toObjects(Exercise::class.java)
+//                if (exercise.size > 0) {
+//                    listItems = exercise
+//                }
+//            }
 
             runOnUiThread {
                 workoutAdapter = WorkoutAdapter(this, listItems)
