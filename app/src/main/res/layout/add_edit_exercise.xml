@@ -52,18 +52,18 @@
         <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:checkedButton="@+id/food"
+                android:checkedButton="@+id/rb_reps"
                 android:orientation="vertical"
                 android:id="@+id/radioGroup"
                 android:padding="20dp">
 
             <RadioButton
-                    android:id="@+id/food"
+                    android:id="@+id/rb_reps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/reps"/>
             <RadioButton
-                    android:id="@+id/electronic"
+                    android:id="@+id/rb_secs"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/time_s"/>

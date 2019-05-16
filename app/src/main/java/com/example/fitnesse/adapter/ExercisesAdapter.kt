@@ -9,7 +9,10 @@ import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.add_edit_workout.view.*
+import kotlinx.android.synthetic.main.add_edit_workout.view.description_et
+import kotlinx.android.synthetic.main.add_edit_workout.view.name_et
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
 class ExercisesAdapter(
@@ -97,6 +100,10 @@ class ExercisesAdapter(
         view.tvAddEditPrompt.text = "Edit Exercise"
         view.name_et.setText(exercises[position].name)
         view.description_et.setText(exercises[position].description)
+        if (exercises[position].isMeasuredWithReps) {
+            view.radioGroup.check(R.id.rb_secs)
+            view.reps_et.setText(exercises[position].value)
+        }
 
         AlertDialog.Builder(context)
             .setView(view)

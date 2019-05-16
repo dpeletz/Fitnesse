@@ -8,29 +8,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
-        when (item.itemId) {
-            R.id.navigation_home -> {
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_timer -> {
-                // TODO: launch timer activity here
-                return@OnNavigationItemSelectedListener true
-            }
-            R.id.navigation_profile -> {
-                startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
-                return@OnNavigationItemSelectedListener true
-            }
-        }
-        false
-    }
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+        ManageBottomNavbar.setupNavbar(this@MainActivity, navigation)
 
         btnWorkouts.setOnClickListener {
             startActivity(Intent(this@MainActivity, WorkoutsActivity::class.java))

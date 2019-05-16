@@ -77,7 +77,8 @@ class WorkoutsActivity : AppCompatActivity() {
             "",
             0,
             false,
-            2
+            2,
+            false
         )
 
         val exerciseList = listOf(exercise)

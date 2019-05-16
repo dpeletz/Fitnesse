@@ -83,7 +83,8 @@ class ExercisesActivity : AppCompatActivity() {
             description,
             radioButton,
             false,
-            2
+            2,
+            false
         )
 
         var exercisesCollection = FirebaseFirestore.getInstance().collection(
