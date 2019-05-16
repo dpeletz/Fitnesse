@@ -12,10 +12,13 @@ object ManageBottomNavbar {
         val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
+                    val intent = Intent(context, MainActivity::class.java)
+                    context.startActivity(intent)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_timer -> {
-                    // TODO: launch timer activity here
+                    val intent = Intent(context, StopwatchActivity::class.java)
+                    context.startActivity(intent)
                     return@OnNavigationItemSelectedListener true
                 }
                 R.id.navigation_profile -> {
@@ -25,6 +28,10 @@ object ManageBottomNavbar {
                 }
             }
             false
+        }
+
+        when(context) {
+
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
