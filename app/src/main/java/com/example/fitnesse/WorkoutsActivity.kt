@@ -47,18 +47,10 @@ class WorkoutsActivity : AppCompatActivity() {
             /*
             TODO: incorporate Firebase here
              */
-//            var exerciseList = listOf(
-//                Exercise("exercise1", "user1", "Squat", false, 1),
-//                Exercise("exercise2", "user1", "Bench Press", false, 2)
-//            )
 
             val date = Date(2019, 3, 4)
             val stackHistory = Stack<Date>()
             stackHistory.push(date)
-//
-//            val listItems: List<Workout> = listOf(
-//                Workout("workout1", "user1", "Upper Body", exerciseList, 45F, stackHistory, 5, 5, 5)
-//            )
 
             runOnUiThread {
                 //                workoutsAdapter = WorkoutsAdapter(this, listItems)
@@ -94,13 +86,10 @@ class WorkoutsActivity : AppCompatActivity() {
             description
         )
 
-//        var workoutsCollection = FirebaseFirestore.getInstance().collection(
-//            "workouts"
-//        )
         var workoutsCollection =
-            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("workouts")
-
 
         workoutsCollection.add(
             workout
@@ -110,7 +99,6 @@ class WorkoutsActivity : AppCompatActivity() {
                 "Workout saved", Toast.LENGTH_LONG
             ).show()
 
-//            finish()
         }.addOnFailureListener {
             Toast.makeText(
                 this@WorkoutsActivity,
@@ -123,8 +111,8 @@ class WorkoutsActivity : AppCompatActivity() {
     private fun initWorkouts() {
         val db = FirebaseFirestore.getInstance()
 
-//        val query = db.collection("workouts")
-        val query = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        val query = db.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("workouts")
 
 

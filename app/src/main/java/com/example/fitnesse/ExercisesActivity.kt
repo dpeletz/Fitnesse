@@ -12,10 +12,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
 import kotlinx.android.synthetic.main.activity_exercises.navigation
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.add_edit_exercise.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
-import kotlinx.android.synthetic.main.exercise_item.*
 import java.util.*
 
 class ExercisesActivity : AppCompatActivity() {
@@ -38,10 +35,6 @@ class ExercisesActivity : AppCompatActivity() {
         btn_add_exercise.setOnClickListener {
             addFragmentPopup()
         }
-
-//        btn_delete_exercise.setOnClickListener {
-//            exercisesAdapter.removeExercise()
-//        }
     }
 
     private fun populateExerciseItems() {
@@ -52,19 +45,7 @@ class ExercisesActivity : AppCompatActivity() {
 
             initExercises()
 
-//            var listItems: List<Exercise> = listOf(
-//                Exercise("exercise1", "user1", "Squat", false, 1),
-//                Exercise("exercise2", "user1", "Bench Press", false, 2)
-//            )
-//            var exercisesCollection = FirebaseFirestore.getInstance().collection(
-//                "exercises"
-//            )
-
-
             runOnUiThread {
-                //                exercisesAdapter = ExercisesAdapter(this, listItems)
-//                exercisesAdapter = ExercisesAdapter(this, listItems)
-
                 recyclerList.layoutManager = LinearLayoutManager(this)
                 recyclerList.adapter = exercisesAdapter
             }
@@ -90,14 +71,10 @@ class ExercisesActivity : AppCompatActivity() {
             2, true
         )
 
-//        var exercisesCollection = FirebaseFirestore.getInstance().collection(
-//            "exercises"
-//        )
         var exercisesCollection =
-            FirebaseFirestore.getInstance().collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
-//        var exercisesCollection = FirebaseFirestore.getInstance().collection("users").document("exercises")
-//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
 
 
         exercisesCollection.add(
@@ -108,7 +85,6 @@ class ExercisesActivity : AppCompatActivity() {
                 "Exercise saved", Toast.LENGTH_LONG
             ).show()
 
-//            finish()
         }.addOnFailureListener {
             Toast.makeText(
                 this@ExercisesActivity,
@@ -121,17 +97,8 @@ class ExercisesActivity : AppCompatActivity() {
     private fun initExercises() {
         val db = FirebaseFirestore.getInstance()
 
-//        val query = db.collection("users").document("exercises")
-//            .collection(FirebaseAuth.getInstance().currentUser!!.uid.toString())
         val query = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises")
-
-////        val query = db.collection("exercises")
-//        var userId = FirebaseAuth.getInstance().currentUser!!.uid
-//        println(userId)
-////        println(FirebaseAuth.getInstance().docu)
-//        println("----------")
-//        val usersQuery = db.collection("users")
 
         var allExercisesListener = query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
@@ -174,12 +141,6 @@ class ExercisesActivity : AppCompatActivity() {
                 val reps = view.reps_et.text.toString()
                 addExercise(name, description, radioButton)
 
-//                if (radioButton == 1) {
-//                    addExercise(name, description, radioButton)
-//                }
-//                if (radioButton == 2) {
-//                    addExercise(name, description, radioButton)
-//                }
                 // TODO: give values to addExercise so that the data can be saved
                 // TODO: also should we check for empty edit texts?
                 dialog.dismiss()

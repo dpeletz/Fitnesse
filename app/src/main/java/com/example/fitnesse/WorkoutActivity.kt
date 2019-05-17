@@ -28,9 +28,6 @@ class WorkoutActivity : AppCompatActivity() {
             /*
             TODO: incorporate Firebase here
              */
-//            var listItems: List<Exercise> = listOf(
-//                Exercise("exercise3", "user1", "Bench Press", "", 0, false, 2, false)
-//            )
             var exercisesCollection =
                 FirebaseFirestore.getInstance().collection("users")
                     .document(FirebaseAuth.getInstance().currentUser!!.uid)
@@ -39,6 +36,9 @@ class WorkoutActivity : AppCompatActivity() {
             var listItems: List<Exercise> =
                 listOf(Exercise(userID = FirebaseAuth.getInstance().currentUser!!.uid, name = "chest press"))
 
+
+// CODE BELOW SHOWS HOW TO QUERY THE EXERCISES LIST AND SEE IF THERE IS MORE THAN 1 EXERCISE:
+//
 //            exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
 //                val exercise = documentSnapshot.toObjects(Exercise::class.java)
 //                if (exercise.size > 0) {

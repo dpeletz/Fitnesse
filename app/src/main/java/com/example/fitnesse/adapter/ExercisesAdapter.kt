@@ -69,7 +69,7 @@ class ExercisesAdapter(
             removeExercise(viewHolder.adapterPosition)
         }
 
-        viewHolder.btmEditExercise.setOnClickListener{
+        viewHolder.btmEditExercise.setOnClickListener {
             editFragmentPopup(position)
         }
     }

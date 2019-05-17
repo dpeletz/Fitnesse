@@ -29,14 +29,6 @@ class GraphActivity : AppCompatActivity() {
 
         val lineDataSet = LineDataSet(entries, "Cells")
 
-//        val labels = ArrayList<String>()
-//        labels.add("18-Jan")
-//        labels.add("19-Jan")
-//        labels.add("20-Jan")
-//        labels.add("21-Jan")
-//        labels.add("22-Jan")
-//        labels.add("23-Jan")
-
         val data = LineData(lineDataSet)
 
         lineChart.data = data // set the data and list of labels into chart

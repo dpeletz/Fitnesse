@@ -10,13 +10,13 @@ import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import kotlinx.android.synthetic.main.exercise_preview.view.*
 
-class WorkoutAdapter: RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
+class WorkoutAdapter : RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
     var exercises = mutableListOf<Exercise>()
 
     private val context: Context
 
     // must call super in constructor as well
-    constructor(context: Context, exerciseItems : List<Exercise>) : super() {
+    constructor(context: Context, exerciseItems: List<Exercise>) : super() {
         this.context = context
         exercises.addAll(exerciseItems)
     }
