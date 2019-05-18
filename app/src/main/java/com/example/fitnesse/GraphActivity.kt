@@ -2,18 +2,61 @@ package com.example.fitnesse
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import com.example.fitnesse.data.Exercise
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_graph.*
 
-class GraphActivity : AppCompatActivity() {
+class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+    var exercises = arrayOf(
+        "Exercise 1",
+        "Exercise 2",
+        "Exercise 3",
+        "Exercise 4",
+        "Exercise 5"
+    )
+    var spinner: Spinner? = null
 
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+        println("NOTHING SELECTED YET")
+        println("----------")
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        println(parent!!.getItemAtPosition(position))
+        println("----------")
+    }
+    
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_graph)
         ManageBottomNavbar.setupNavbar(this@GraphActivity, navigation)
 
         setLineChart()
+
+        spinner = this.spinnerGraphType
+        spinner!!.setOnItemSelectedListener(this)
+
+        val exercisesCollection = FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("exercises")
+
+        exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
+            val exerciseList = documentSnapshot.toObjects(Exercise::class.java)
+
+            val exerciseNameList = ArrayList<String>(exerciseList.size)
+            exerciseList.forEach { it -> exerciseNameList.add(it.name) }
+
+            val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner!!.setAdapter(aa)
+        }
     }
 
     private fun setLineChart() {
