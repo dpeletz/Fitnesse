@@ -15,11 +15,6 @@ class ExerciseResultsAdapter(
     private val uId: String
 ) : RecyclerView.Adapter<ExerciseResultsAdapter.ViewHolder>() {
 
-//    private val context: Context
-//class ExercisesAdapter : RecyclerView.Adapter<ExercisesAdapter.ViewHolder> {
-//
-//    private val context: Context
-
     private var exerciseResults = mutableListOf<ExerciseResult>()
     private var exerciseResultKeys = mutableListOf<String>()
 
@@ -66,14 +61,12 @@ class ExerciseResultsAdapter(
         }
     }
 
-
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val exerciseResult = exerciseResults[position]
 
 //        viewHolder.name.text = exerciseResult.name
 //        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
     }
-
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 //        val name = itemView.name

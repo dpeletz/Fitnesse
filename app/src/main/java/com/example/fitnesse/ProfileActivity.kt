@@ -66,8 +66,7 @@ class ProfileActivity : AppCompatActivity() {
             val user = documentSnapshot.toObjects(User::class.java)
             if (user.size > 0) {
 
-                // TODO: CHANGE HARDCODED DOCUMENT PATH!
-                usersCollection.document("Pdr5ogejM7bsvL9gMhnB")
+                usersCollection.document(documentSnapshot.documents.first().id)
                     .update(
                         (mapOf(
                             "weight" to etWeight.text.toString().toFloat(),

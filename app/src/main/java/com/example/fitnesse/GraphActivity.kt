@@ -18,6 +18,7 @@ class GraphActivity : AppCompatActivity() {
 
     private fun setLineChart() {
         val entries = ArrayList<Entry>()
+
         entries.add(Entry(1f, 135F))
         entries.add(Entry(8f, 155F))
         entries.add(Entry(15f, 160F))
@@ -53,5 +54,4 @@ class GraphActivity : AppCompatActivity() {
         xAxis.axisMaximum = 70F
         xAxis.position = XAxis.XAxisPosition.BOTTOM
     }
-
 }
