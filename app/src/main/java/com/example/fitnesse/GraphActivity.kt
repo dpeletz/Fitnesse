@@ -32,7 +32,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         println(parent!!.getItemAtPosition(position))
         println("----------")
     }
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_graph)
