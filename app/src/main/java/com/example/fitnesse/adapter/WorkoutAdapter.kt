@@ -34,14 +34,11 @@ class WorkoutAdapter : RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
 
     override fun onBindViewHolder(viewHolder: WorkoutAdapter.ViewHolder, position: Int) {
         val exercise = exercises[position]
-
-        Log.d("tag check", viewHolder.toString())
-
         viewHolder.name.text = exercise.name
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.tv_exercise_name
+        val name = itemView.name
     }
 }

@@ -1,29 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             xmlns:app="http://schemas.android.com/apk/res-auto"
-android:padding="20dp">
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              app:layout_constraintLeft_toLeftOf="parent"
-              app:layout_constraintBaseline_toBaselineOf="parent"
-              android:id="@+id/tv_exercise_name"
-              android:text="@string/placeholder_name"/>
+<android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/card_view"
+        android:layout_margin="5dp">
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                 android:layout_width="match_parent"
+                                                 xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+                                                 android:layout_height="match_parent"
+                                                 android:id="@+id/exerciseItem"
+                                                 android:background="#eeeeee">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Exercise Name"
+                android:id="@+id/name"
+                materialdesign:layout_constraintLeft_toLeftOf="@+id/exerciseItem"
+                materialdesign:layout_constraintTop_toTopOf="parent"
+                materialdesign:layout_constraintBottom_toBottomOf="parent"
+                android:paddingLeft="30dp"/>
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintRight_toLeftOf="@id/tv_reps"
-            app:layout_constraintBaseline_toBaselineOf="parent"
-            android:text="@string/reps"
-    />
 
-    <TextView android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              app:layout_constraintRight_toRightOf="parent"
-              app:layout_constraintBaseline_toBaselineOf="parent"
-              android:id="@+id/tv_reps"
-              android:text="@string/zero_placeholder"
-              android:layout_marginLeft="5dp"/>
-</android.support.constraint.ConstraintLayout>
+        <com.gc.materialdesign.views.ButtonIcon
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_delete_workout"
+                android:layout_marginRight="10dp"
+                materialdesign:layout_constraintRight_toRightOf="@+id/exerciseItem"
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/name">
+            <ImageView android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:src="@drawable/ic_delete_sweep"
+                       android:layout_centerHorizontal="true"
+                       android:layout_centerVertical="true"
+            />
+        </com.gc.materialdesign.views.ButtonIcon>
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>
