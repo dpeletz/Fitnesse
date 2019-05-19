@@ -3,6 +3,7 @@ package com.example.fitnesse
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.util.Log
 import android.widget.Toast
 import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
@@ -26,6 +27,8 @@ class ProfileActivity : AppCompatActivity() {
             userID = FirebaseAuth.getInstance().currentUser!!.uid
         )
 
+        loadUser()
+
         editTexts = listOf<TextInputEditText>(
             etName,
             etGender,
@@ -42,16 +45,23 @@ class ProfileActivity : AppCompatActivity() {
             }
             switchEditMode()
         }
+
     }
 
     private fun sendValuesToFirebase() {
-        //TODO: SET THIS UP WITH FIREBASE
+        //TODO: SHOULD WE ALLOW EMPTY VALUES???
 
         user.weight = etWeight.text.toString().toFloat()
         user.height = etHeight.text.toString().toFloat()
         user.gender = genderArray.indexOf(etGender.text.toString().toUpperCase())
         user.age = etAge.text.toString().toInt()
         user.name = etName.text.toString()
+
+        if (etWeight.text.toString().toFloat() != 0F) {
+            Log.d("height", user.height.toString())
+            etBMI.text = (user.weight / (user.height * user.height)).toString() +
+                    " kg / m^2"
+        }
 
         addOrUpdateUser()
     }
@@ -83,6 +93,29 @@ class ProfileActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun loadUser() {
+        var usersCollection = FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("user")
+
+        usersCollection.get().addOnSuccessListener { documentSnapshot ->
+            val user = documentSnapshot.toObjects(User::class.java)
+            if (user.size > 0) {
+                etName.setText(user.get(0).name)
+                etWeight.setText(user.get(0).weight.toString())
+                etHeight.setText(user.get(0).height.toString())
+                etGender.setText(genderArray[user.get(0).gender])
+                etAge.setText(user.get(0).age.toString())
+
+                if (user.get(0).weight != 0F) {
+                    etBMI.text = (user.get(0).weight / (user.get(0).height * user.get(0).height)).toString() +
+                            " kg / m^2"
+                }
+
+            }
+        }
     }
 
     private fun addUserToCollection(usersCollection: CollectionReference) {
