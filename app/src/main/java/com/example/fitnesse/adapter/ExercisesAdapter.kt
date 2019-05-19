@@ -8,8 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
+import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
@@ -81,13 +83,34 @@ class ExercisesAdapter(
         val btmEditExercise = itemView.btn_edit_workout
     }
 
-    fun updateExercise(index: Int) {
-        //TODO: implement
+    fun updateExercise(index: Int, name: String, description: String, view: View) {
+        //TODO: implement this updateExercise function
+//        var exercisesCollection = FirebaseFirestore.getInstance().collection("users")
+//            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+//            .collection("exercise")
+//
+//        exercisesCollection
+//            .whereEqualTo("name", name).get().addOnSuccessListener { documentSnapshot ->
+//                val exercise = documentSnapshot.toObjects(Exercise::class.java)
+//
+//                exercise.first().description = description
+////                exercisesCollection.document().update(
+////                    (mapOf(
+////                        "name" to name,
+////                        "description" to description
+////                    ))
+////                )
+//                view.name.setText(name)
+//                view.description_et.setText(description)
+//            }
     }
 
     private fun editFragmentPopup(position: Int) {
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.add_edit_exercise, null)
+
+        val oldName = view.name_et.text.toString()
+        val oldDescription = view.description_et.text.toString()
 
         view.tvAddEditPrompt.text = "Edit Exercise"
         view.name_et.setText(exercises[position].name)
@@ -105,7 +128,7 @@ class ExercisesAdapter(
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 // TODO: give name and description to updateExercise so that the data can be saved
-                updateExercise(position)
+                updateExercise(position, oldName, oldDescription, view)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->

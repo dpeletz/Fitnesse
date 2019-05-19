@@ -14,23 +14,65 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_graph.*
 
 class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    var exercises = arrayOf(
-        "Exercise 1",
-        "Exercise 2",
-        "Exercise 3",
-        "Exercise 4",
-        "Exercise 5"
-    )
     var spinner: Spinner? = null
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
+        // TODO: allow graph to just be first exercise in list (if one exists)
         println("NOTHING SELECTED YET")
         println("----------")
+//        val entries = ArrayList<Entry>()
+//
+//        entries.add(Entry(1f, 135F))
+//        entries.add(Entry(8f, 155F))
+//        entries.add(Entry(15f, 160F))
+//        entries.add(Entry(22f, 175F))
+//        entries.add(Entry(29f, 180F))
+//        entries.add(Entry(36f, 180F))
+//        entries.add(Entry(50f, 195F))
+//        entries.add(Entry(64f, 225F))
+//        entries.add(Entry(83f, 235F))
+//        setLineChart(entries)
+
+
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        println(parent!!.getItemAtPosition(position))
+        // TODO: switch graph to the selected exercise
+        var selectedExerciseName = parent!!.getItemAtPosition(position)
+        println(selectedExerciseName)
         println("----------")
+        var exercisesCollection =
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .collection("exercises")
+
+        exercisesCollection
+            .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
+                val exercise = documentSnapshot.toObjects(Exercise::class.java)
+
+                var recordList = exercise.first().recordList
+
+                val entries = ArrayList<Entry>()
+
+                recordList.forEach { r -> entries.add(Entry(recordList.indexOf(r).toFloat(), r.toFloat())) }
+
+//                entries.add(Entry(1f, 135F))
+//                entries.add(Entry(8f, 155F))
+//                entries.add(Entry(15f, 160F))
+//                entries.add(Entry(22f, 175F))
+//                entries.add(Entry(29f, 180F))
+//                entries.add(Entry(36f, 180F))
+//                entries.add(Entry(50f, 195F))
+//                entries.add(Entry(64f, 225F))
+//                entries.add(Entry(83f, 235F))
+                setLineChart(entries)
+
+
+//                if (exercise.size > 0) {
+//                    println("")
+//                }
+
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +80,20 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(R.layout.activity_graph)
         ManageBottomNavbar.setupNavbar(this@GraphActivity, navigation)
 
-        setLineChart()
+        val entries = ArrayList<Entry>()
+
+        entries.add(Entry(1f, 135F))
+        entries.add(Entry(2f, 155F))
+        entries.add(Entry(3f, 160F))
+        entries.add(Entry(4f, 175F))
+        entries.add(Entry(5f, 180F))
+        entries.add(Entry(6f, 180F))
+        entries.add(Entry(7f, 195F))
+        entries.add(Entry(8f, 225F))
+        entries.add(Entry(9f, 235F))
+        setLineChart(entries)
+
+        setLineChart(entries)
 
         spinner = this.spinnerGraphType
         spinner!!.setOnItemSelectedListener(this)
@@ -50,6 +105,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
             val exerciseList = documentSnapshot.toObjects(Exercise::class.java)
 
+            // TODO: potentially add in check to verify that at least 1 exercise is in list
             val exerciseNameList = ArrayList<String>(exerciseList.size)
             exerciseList.forEach { it -> exerciseNameList.add(it.name) }
 
@@ -59,18 +115,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun setLineChart() {
-        val entries = ArrayList<Entry>()
-
-        entries.add(Entry(1f, 135F))
-        entries.add(Entry(8f, 155F))
-        entries.add(Entry(15f, 160F))
-        entries.add(Entry(22f, 175F))
-        entries.add(Entry(29f, 180F))
-        entries.add(Entry(36f, 180F))
-        entries.add(Entry(50f, 195F))
-        entries.add(Entry(64f, 225F))
-
+    private fun setLineChart(entries: ArrayList<Entry>) {
         val lineDataSet = LineDataSet(entries, "Cells")
 
         val data = LineData(lineDataSet)
@@ -94,7 +139,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         val xAxis = lineChart.xAxis
         xAxis.axisMinimum = 0F
-        xAxis.axisMaximum = 70F
+        xAxis.axisMaximum = 10F
         xAxis.position = XAxis.XAxisPosition.BOTTOM
     }
 }
