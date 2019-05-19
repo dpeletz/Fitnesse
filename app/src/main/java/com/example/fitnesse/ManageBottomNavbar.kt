@@ -3,6 +3,9 @@ package com.example.fitnesse
 import android.content.Context
 import android.content.Intent
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.content.ContextCompat.startActivity
+import android.util.Log
+import kotlinx.android.synthetic.main.activity_main.*
 
 object ManageBottomNavbar {
 
