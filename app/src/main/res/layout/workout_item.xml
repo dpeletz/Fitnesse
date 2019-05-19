@@ -11,6 +11,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
+            android:background="#eeeeee"
             android:id="@+id/workoutItem">
 
         <TextView
@@ -19,25 +20,21 @@
                 android:text="Workout Name"
                 android:id="@+id/name"
                 materialdesign:layout_constraintLeft_toLeftOf="parent"
-                materialdesign:layout_constraintBaseline_toBaselineOf="parent"
+                materialdesign:layout_constraintTop_toTopOf="parent"
+                materialdesign:layout_constraintBottom_toBottomOf="parent"
                 android:paddingLeft="30dp"/>
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/colorPrimaryDark"
-                materialdesign:layout_constraintRight_toRightOf="parent"
-                materialdesign:layout_constraintLeft_toLeftOf="parent"
-                materialdesign:layout_constraintTop_toTopOf="parent"/>
 
         <com.gc.materialdesign.views.ButtonIcon
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_view_workout"
                 materialdesign:layout_constraintRight_toLeftOf="@+id/btn_edit_workout"
-                materialdesign:layout_constraintBaseline_toBaselineOf="parent">
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/name">
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        android:src="@drawable/ic_add_circle_outline"
+                       android:layout_centerVertical="true"
+                       android:layout_centerHorizontal="true"
             />
         </com.gc.materialdesign.views.ButtonIcon>
 
@@ -46,9 +43,11 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_edit_workout"
                 materialdesign:layout_constraintRight_toLeftOf="@+id/btn_delete_workout"
-                materialdesign:layout_constraintBaseline_toBaselineOf="parent">
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/name">
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        android:src="@drawable/ic_mode_edit"
+                       android:layout_centerVertical="true"
+                       android:layout_centerHorizontal="true"
             />
         </com.gc.materialdesign.views.ButtonIcon>
 
@@ -57,19 +56,14 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/btn_delete_workout"
                 materialdesign:layout_constraintRight_toRightOf="parent"
-                materialdesign:layout_constraintBaseline_toBaselineOf="parent"
-                android:paddingRight="30dp">
+                materialdesign:layout_constraintBaseline_toBaselineOf="@+id/name"
+                android:layout_marginRight="30dp">
             <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
                        android:src="@drawable/ic_delete_sweep"
+                       android:layout_centerVertical="true"
+                       android:layout_centerHorizontal="true"
             />
         </com.gc.materialdesign.views.ButtonIcon>
 
-        <View
-                android:layout_width="match_parent"
-                android:layout_height="2dp"
-                android:background="@color/colorPrimaryDark"
-                materialdesign:layout_constraintRight_toRightOf="parent"
-                materialdesign:layout_constraintLeft_toLeftOf="parent"
-                materialdesign:layout_constraintBottom_toBottomOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

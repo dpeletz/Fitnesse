@@ -7,9 +7,10 @@
 
     <ImageView
             android:id="@+id/ivIcon"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/met_ic_clear"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/ic_av_timer"
             android:scaleType="fitXY"/>
 
     <TextView
@@ -21,6 +22,7 @@
 
     <Button android:id="@+id/btnDelete"
             android:text="Delete"
+            android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
