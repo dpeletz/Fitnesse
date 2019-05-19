@@ -4,6 +4,8 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
+import android.view.View
 import android.widget.Toast
 import com.example.fitnesse.adapter.ExercisesAdapter
 import com.example.fitnesse.data.Exercise
@@ -12,6 +14,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
 import kotlinx.android.synthetic.main.activity_exercises.navigation
+import kotlinx.android.synthetic.main.add_edit_exercise.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import java.util.*
 
@@ -58,23 +61,44 @@ class ExercisesActivity : AppCompatActivity() {
         return string_UUID
     }
 
-    private fun addExercise(name: String, description: String, radioButton: Int) {
-
+    private fun addExercise(name: String, description: String, timeOrReps: Int) {
         //TODO: link this up to correct information from an add exercise dialog or activity
         val exercise = Exercise(
             FirebaseAuth.getInstance().currentUser!!.uid,
             getExerciseUUID(),
             name,
             description,
-            radioButton,
+            timeOrReps,
+            -1,
+            listOf(40, 50, 80, 90, 100),
             false,
-            2, true
+            2,
+            true
         )
 
         var exercisesCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
+
+        exercisesCollection
+            .whereEqualTo("name", name).get().addOnSuccessListener { documentSnapshot ->
+                val exercise = documentSnapshot.toObjects(Exercise::class.java)
+
+                if (exercise.size > 0) {
+                    println("EXERCISE ALREADY IN DB")
+                    // TODO: change functionality when exercise already exists in DB
+                }
+//                exercisesCollection.document(documentSnapshot.documents.first().id)
+//                    .update(
+//                        (mapOf(
+//                            "name" to name,
+//                            "description" to description
+//                        ))
+//                    )
+//                view.name.setText(name)
+//                view.description_et.setText(description)
+            }
 
 
         exercisesCollection.add(
@@ -137,9 +161,15 @@ class ExercisesActivity : AppCompatActivity() {
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 val radioButton = view.radioGroup.checkedRadioButtonId
-                val time = view.secs_et.text.toString()
-                val reps = view.reps_et.text.toString()
-                addExercise(name, description, radioButton)
+                println(radioButton)
+                if (radioButton == 2131296438) {
+                    val reps = view.reps_et.text!!.toString().toInt()
+                    addExercise(name, description, reps)
+                }
+                if (radioButton == 2131296439) {
+                    val seconds = view.secs_et.text!!.toString().toInt()
+                    addExercise(name, description, seconds)
+                }
 
                 // TODO: give values to addExercise so that the data can be saved
                 // TODO: also should we check for empty edit texts?
@@ -149,7 +179,7 @@ class ExercisesActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .show()
-    }
 
+    }
 
 }
