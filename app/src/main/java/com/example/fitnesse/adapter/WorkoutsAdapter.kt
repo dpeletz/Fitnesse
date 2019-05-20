@@ -13,8 +13,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import kotlinx.android.synthetic.main.workout_item.view.*
 import android.support.v4.content.ContextCompat.getSystemService
+import android.support.v4.content.ContextCompat.isDeviceProtectedStorage
+import android.widget.Toast
 import com.example.fitnesse.R
 import com.google.firebase.auth.FirebaseAuth
+import java.util.*
 
 
 class WorkoutsAdapter(
@@ -87,8 +90,19 @@ class WorkoutsAdapter(
         notifyItemRemoved(index)
     }
 
-    fun updateWorkout(index: Int) {
-        //TODO: implement
+    fun updateWorkout(index: Int, newWorkout: Workout) {
+        FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .collection("workouts")
+                .document(workoutKeys[index])
+                .update(
+                    "name", newWorkout.name,
+                    "description", newWorkout.description
+                )
+            .addOnSuccessListener {
+                workouts[index] = newWorkout
+                notifyItemChanged(index)
+            }
     }
 
     private fun editFragmentPopup(position: Int) {
@@ -102,10 +116,11 @@ class WorkoutsAdapter(
         AlertDialog.Builder(context)
             .setView(view)
             .setPositiveButton("Update") { dialog, which ->
-                val name = view.name_et.text.toString()
-                val description = view.description_et.text.toString()
-                // TODO: give name and description to addWorkout so that the data can be saved
-                updateWorkout(position)
+                val workout = workouts[position]
+                workout.name = view.name_et.text.toString()
+                workout.description = view.description_et.text.toString()
+
+                updateWorkout(position, workout)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->

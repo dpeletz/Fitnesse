@@ -12,7 +12,6 @@ import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
@@ -84,50 +83,58 @@ class ExercisesAdapter(
         val btmEditExercise = itemView.btn_edit_workout
     }
 
-    fun updateExercise(index: Int, name: String, description: String, view: View) {
-        var firebaseData = FirebaseDatabase.getInstance().reference
+    fun updateExercise(index: Int, newExercise: Exercise) {
+        var exercisesCollection =
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .collection("exercises")
+        exercisesCollection.document(exerciseKeys[index]).update(
+            "name", newExercise.name,
+            "description", newExercise.description,
+            "value", newExercise.value,
+            "isMeasuredWithReps", newExercise.isMeasuredWithReps,
+            "sets", newExercise.sets
+        ).addOnSuccessListener {
+                exercises[index] = newExercise
+                notifyItemChanged(index)
+            }
 
-        //delete
-        firebaseData
-            .child("users")
-            .child(exercises[index].userID)
-            .child("exercises")
-            .child(exercises[index].exerciseID)
-            .setValue(null)
 
-        //add
-        firebaseData
-            .child("users")
-            .child(exercises[index].userID)
-            .child("exercises")
-            .child(exercises[index].exerciseID)
-            .setValue(true)
+
     }
 
     private fun editFragmentPopup(position: Int) {
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.add_edit_exercise, null)
 
-        val oldName = view.name_et.text.toString()
-        val oldDescription = view.description_et.text.toString()
-
         view.tvAddEditPrompt.text = "Edit Exercise"
         view.name_et.setText(exercises[position].name)
         view.description_et.setText(exercises[position].description)
+        // TODO: why does it go back to reps when activity is resumed
         if (exercises[position].isMeasuredWithReps) {
             view.radioGroup.check(view.rb_reps.id)
             view.reps_et.setText(exercises[position].value.toString())
         } else {
+            view.radioGroup.check(view.rb_secs.id)
             view.secs_et.setText(exercises[position].value.toString())
         }
+        view.sets_et.setText(exercises[position].sets.toString())
 
         AlertDialog.Builder(context)
             .setView(view)
             .setPositiveButton("Update") { dialog, which ->
-                val name = view.name_et.text.toString()
-                val description = view.description_et.text.toString()
-                // TODO: give name and description to updateExercise so that the data can be saved
-                updateExercise(position, oldName, oldDescription, view)
+                val exercise = exercises[position]
+                exercise.name = view.name_et.text.toString()
+                exercise.description = view.description_et.text.toString()
+                exercise.isMeasuredWithReps = (view.radioGroup.checkedRadioButtonId == R.id.rb_reps)
+                exercise.sets = view.sets_et.text.toString().toInt()
+
+                if (view.radioGroup.checkedRadioButtonId == R.id.rb_reps) {
+                    exercise.value = view.reps_et.text!!.toString().toInt()
+                } else if (view.radioGroup.checkedRadioButtonId == R.id.rb_secs) {
+                    exercise.value = view.secs_et.text!!.toString().toInt()
+                }
+                updateExercise(position, exercise)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->

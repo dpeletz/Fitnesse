@@ -14,6 +14,7 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
 import kotlinx.android.synthetic.main.activity_exercises.navigation
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.add_edit_exercise.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import java.util.*
@@ -61,28 +62,14 @@ class ExercisesActivity : AppCompatActivity() {
         return string_UUID
     }
 
-    private fun addExercise(name: String, description: String, timeOrReps: Int) {
-        //TODO: link this up to correct information from an add exercise dialog or activity
-        val exercise = Exercise(
-            FirebaseAuth.getInstance().currentUser!!.uid,
-            getExerciseUUID(),
-            name,
-            description,
-            timeOrReps,
-            -1,
-            listOf(40, 50, 80, 90, 100),
-            false,
-            2,
-            true
-        )
-
+    private fun addExercise(exercise: Exercise) {
         var exercisesCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
 
         exercisesCollection
-            .whereEqualTo("name", name).get().addOnSuccessListener { documentSnapshot ->
+            .whereEqualTo("name", exercise.name).get().addOnSuccessListener { documentSnapshot ->
                 val exercise = documentSnapshot.toObjects(Exercise::class.java)
 
                 if (exercise.size > 0) {
@@ -99,19 +86,16 @@ class ExercisesActivity : AppCompatActivity() {
 //                view.name.setText(name)
 //                view.description_et.setText(description)
             }
-        Log.d("checkpoint", "hi")
 
         exercisesCollection.add(
             exercise
         ).addOnSuccessListener {
             exercise.exerciseID = it.id
-            Log.d("checkpoint", "hi again")
             Toast.makeText(
                 this@ExercisesActivity,
                 "Exercise saved", Toast.LENGTH_LONG
             ).show()
         }.addOnFailureListener {
-            Log.d("checkpoint", "faaaail")
             Toast.makeText(
                 this@ExercisesActivity,
                 "Error: ${it.message}", Toast.LENGTH_LONG
@@ -163,17 +147,27 @@ class ExercisesActivity : AppCompatActivity() {
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 val radioButton = view.radioGroup.checkedRadioButtonId
-                if (radioButton == 2131296438) {
-                    val reps = view.reps_et.text!!.toString().toInt()
-                    addExercise(name, description, reps)
-                }
-                if (radioButton == 2131296439) {
-                    val seconds = view.secs_et.text!!.toString().toInt()
-                    addExercise(name, description, seconds)
-                }
+                val sets = view.sets_et.text.toString().toInt()
 
-                // TODO: give values to addExercise so that the data can be saved
-                // TODO: also should we check for empty edit texts?
+                val exercise = Exercise(
+                    FirebaseAuth.getInstance().currentUser!!.uid,
+                    getExerciseUUID(),
+                    name,
+                    description,
+                    0,
+                    sets,
+                    listOf(),
+                    false,
+                    2,
+                    (radioButton == R.id.rb_reps)
+                )
+                if (radioButton == R.id.rb_reps) {
+                    exercise.value = view.reps_et.text!!.toString().toInt()
+                } else if (radioButton == R.id.rb_secs) {
+                    exercise.value = view.secs_et.text!!.toString().toInt()
+                }
+                addExercise(exercise)
+
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, which ->
