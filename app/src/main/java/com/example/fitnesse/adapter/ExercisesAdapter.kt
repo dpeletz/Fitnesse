@@ -10,6 +10,7 @@ import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
@@ -84,25 +85,23 @@ class ExercisesAdapter(
     }
 
     fun updateExercise(index: Int, name: String, description: String, view: View) {
-        //TODO: implement this updateExercise function
-//        var exercisesCollection = FirebaseFirestore.getInstance().collection("users")
-//            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
-//            .collection("exercise")
-//
-//        exercisesCollection
-//            .whereEqualTo("name", name).get().addOnSuccessListener { documentSnapshot ->
-//                val exercise = documentSnapshot.toObjects(Exercise::class.java)
-//
-//                exercise.first().description = description
-////                exercisesCollection.document().update(
-////                    (mapOf(
-////                        "name" to name,
-////                        "description" to description
-////                    ))
-////                )
-//                view.name.setText(name)
-//                view.description_et.setText(description)
-//            }
+        var firebaseData = FirebaseDatabase.getInstance().reference
+
+        //delete
+        firebaseData
+            .child("users")
+            .child(exercises[index].userID)
+            .child("exercises")
+            .child(exercises[index].exerciseID)
+            .setValue(null)
+
+        //add
+        firebaseData
+            .child("users")
+            .child(exercises[index].userID)
+            .child("exercises")
+            .child(exercises[index].exerciseID)
+            .setValue(true)
     }
 
     private fun editFragmentPopup(position: Int) {

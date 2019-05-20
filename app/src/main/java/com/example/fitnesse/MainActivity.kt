@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this@MainActivity, ExercisesActivity::class.java))
         }
 
-        btnProfile.setOnClickListener {
+        btnProfile.setOnClickListener{
             startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
         }
 

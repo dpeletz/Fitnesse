@@ -41,9 +41,6 @@
     </android.support.design.widget.TextInputLayout>
 
 
-
-
-
     <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +59,8 @@
                     android:id="@+id/rb_reps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/reps"/>
+                    android:text="@string/reps"
+                    android:layout_marginBottom="5dp"/>
             <RadioButton
                     android:id="@+id/rb_secs"
                     android:layout_width="wrap_content"
@@ -72,35 +70,35 @@
         </RadioGroup>
 
         <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
-
-            <android.support.design.widget.TextInputLayout
+            <android.support.design.widget.TextInputEditText
+                    android:id="@+id/reps_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/reps_text_input">
+                    android:inputType="number"
+            />
 
-                <android.support.design.widget.TextInputEditText
-                        android:id="@+id/reps_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"
-                />
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <android.support.design.widget.TextInputEditText
+                    android:id="@+id/secs_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/secs_text_input">
-
-                <android.support.design.widget.TextInputEditText
-                        android:id="@+id/secs_et"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="number"/>
-            </android.support.design.widget.TextInputLayout>
+                    android:inputType="number"/>
         </LinearLayout>
     </LinearLayout>
+
+    <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/sets_text_input"
+            android:hint="Set Count:">
+
+        <android.support.design.widget.TextInputEditText
+                android:id="@+id/sets_et"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

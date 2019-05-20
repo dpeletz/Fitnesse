@@ -99,17 +99,19 @@ class ExercisesActivity : AppCompatActivity() {
 //                view.name.setText(name)
 //                view.description_et.setText(description)
             }
-
+        Log.d("checkpoint", "hi")
 
         exercisesCollection.add(
             exercise
         ).addOnSuccessListener {
+            exercise.exerciseID = it.id
+            Log.d("checkpoint", "hi again")
             Toast.makeText(
                 this@ExercisesActivity,
                 "Exercise saved", Toast.LENGTH_LONG
             ).show()
-
         }.addOnFailureListener {
+            Log.d("checkpoint", "faaaail")
             Toast.makeText(
                 this@ExercisesActivity,
                 "Error: ${it.message}", Toast.LENGTH_LONG
@@ -161,7 +163,6 @@ class ExercisesActivity : AppCompatActivity() {
                 val name = view.name_et.text.toString()
                 val description = view.description_et.text.toString()
                 val radioButton = view.radioGroup.checkedRadioButtonId
-                println(radioButton)
                 if (radioButton == 2131296438) {
                     val reps = view.reps_et.text!!.toString().toInt()
                     addExercise(name, description, reps)
