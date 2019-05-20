@@ -13,7 +13,6 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_workouts.*
 import kotlinx.android.synthetic.main.activity_workouts.recyclerList
-import kotlinx.android.synthetic.main.add_edit_workout.*
 import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import java.util.*
 
@@ -42,33 +41,19 @@ class WorkoutsActivity : AppCompatActivity() {
 
     private fun populateWorkoutItems() {
         Thread {
-
             initWorkouts()
-            /*
-            TODO: incorporate Firebase here
-             */
-
             val date = Date(2019, 3, 4)
             val stackHistory = Stack<Date>()
             stackHistory.push(date)
 
             runOnUiThread {
-                //                workoutsAdapter = WorkoutsAdapter(this, listItems)
-
                 recyclerList.layoutManager = LinearLayoutManager(this)
                 recyclerList.adapter = workoutsAdapter
             }
-
         }.start()
     }
 
-    private fun getWorkoutUUID(): String {
-        var stringUUID = UUID.randomUUID().toString()
-        return stringUUID
-    }
-
     private fun addWorkout(name: String, description: String) {
-
         val exerciseList = listOf(Exercise())
         val historyStack = Stack<Date>()
         historyStack.push(Date(2019, 5, 5))
@@ -76,7 +61,7 @@ class WorkoutsActivity : AppCompatActivity() {
         //TODO: link this up to correct information from an add workout dialog or activity
         val workout = Workout(
             FirebaseAuth.getInstance().currentUser!!.uid,
-            getWorkoutUUID(),
+            UUID.randomUUID().toString(),
             name,
             exerciseList,
             arrayListOf(Date(2019, 5, 5)),
@@ -105,7 +90,6 @@ class WorkoutsActivity : AppCompatActivity() {
                 "Error: ${it.message}", Toast.LENGTH_LONG
             ).show()
         }
-
     }
 
     private fun initWorkouts() {
@@ -114,7 +98,6 @@ class WorkoutsActivity : AppCompatActivity() {
         val query = db.collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("workouts")
-
 
         var allWorkoutsListener = query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
@@ -161,6 +144,4 @@ class WorkoutsActivity : AppCompatActivity() {
             }
             .show()
     }
-
-
 }

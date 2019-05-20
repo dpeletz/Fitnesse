@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
-import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.exercise_item.view.*
@@ -33,7 +31,6 @@ class ExercisesAdapter(
     override fun getItemCount(): Int {
         return exercises.size
     }
-
 
     fun addExercise(exercise: Exercise, key: String) {
         exercises.add(exercise)
@@ -59,7 +56,6 @@ class ExercisesAdapter(
             notifyItemRemoved(index)
         }
     }
-
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val exercise = exercises[position]
@@ -95,12 +91,9 @@ class ExercisesAdapter(
             "isMeasuredWithReps", newExercise.isMeasuredWithReps,
             "sets", newExercise.sets
         ).addOnSuccessListener {
-                exercises[index] = newExercise
-                notifyItemChanged(index)
-            }
-
-
-
+            exercises[index] = newExercise
+            notifyItemChanged(index)
+        }
     }
 
     private fun editFragmentPopup(position: Int) {

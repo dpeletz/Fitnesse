@@ -32,7 +32,7 @@ class WorkoutActivity : AppCompatActivity() {
 
         populateExercises()
 
-        btn_add_exercise.setOnClickListener{
+        btn_add_exercise.setOnClickListener {
             addFragmentPopup()
         }
     }

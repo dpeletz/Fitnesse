@@ -9,5 +9,4 @@ class FitnesseApplication : Application() {
 
         FirebaseApp.initializeApp(this)
     }
-
 }

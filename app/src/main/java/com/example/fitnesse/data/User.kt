@@ -1,7 +1,5 @@
 package com.example.fitnesse.data
 
-import java.util.Date
-
 data class User(
     var userID: String = "",
     var name: String = "",

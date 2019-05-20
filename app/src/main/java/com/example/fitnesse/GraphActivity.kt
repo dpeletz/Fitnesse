@@ -20,20 +20,6 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         // TODO: allow graph to just be first exercise in list (if one exists)
         println("NOTHING SELECTED YET")
         println("----------")
-//        val entries = ArrayList<Entry>()
-//
-//        entries.add(Entry(1f, 135F))
-//        entries.add(Entry(8f, 155F))
-//        entries.add(Entry(15f, 160F))
-//        entries.add(Entry(22f, 175F))
-//        entries.add(Entry(29f, 180F))
-//        entries.add(Entry(36f, 180F))
-//        entries.add(Entry(50f, 195F))
-//        entries.add(Entry(64f, 225F))
-//        entries.add(Entry(83f, 235F))
-//        setLineChart(entries)
-
-
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -56,21 +42,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 recordList.forEach { r -> entries.add(Entry(recordList.indexOf(r).toFloat(), r.toFloat())) }
 
-//                entries.add(Entry(1f, 135F))
-//                entries.add(Entry(8f, 155F))
-//                entries.add(Entry(15f, 160F))
-//                entries.add(Entry(22f, 175F))
-//                entries.add(Entry(29f, 180F))
-//                entries.add(Entry(36f, 180F))
-//                entries.add(Entry(50f, 195F))
-//                entries.add(Entry(64f, 225F))
-//                entries.add(Entry(83f, 235F))
-                setLineChart(entries)
-
-
-//                if (exercise.size > 0) {
-//                    println("")
-//                }
+                setLineChart(entries, exercise.first().name)
 
             }
     }
@@ -91,9 +63,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         entries.add(Entry(7f, 195F))
         entries.add(Entry(8f, 225F))
         entries.add(Entry(9f, 235F))
-        setLineChart(entries)
-
-        setLineChart(entries)
+        setLineChart(entries, "initial")
 
         spinner = this.spinnerGraphType
         spinner!!.setOnItemSelectedListener(this)
@@ -115,7 +85,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun setLineChart(entries: ArrayList<Entry>) {
+    private fun setLineChart(entries: ArrayList<Entry>, name: String) {
         val lineDataSet = LineDataSet(entries, "Cells")
 
         val data = LineData(lineDataSet)
@@ -123,7 +93,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         lineChart.data = data // set the data and list of labels into chart
 
         // TODO: set chart description
-        lineChart.description.text = "Set Line Chart Description"
+        lineChart.description.text = "Line Chart of $name"
 
         lineDataSet.color = resources.getColor(R.color.colorPrimary)
 

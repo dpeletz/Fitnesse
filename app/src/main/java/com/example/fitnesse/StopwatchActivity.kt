@@ -8,6 +8,9 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class StopwatchActivity : AppCompatActivity() {
+    var lastElapsedTime = "0:0.0"
+    private var enabled = false
+    private lateinit var mainTimer: Timer
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,28 +25,23 @@ class StopwatchActivity : AppCompatActivity() {
 
         btnStart.setOnClickListener {
             enabled = true
-
             mainTimer = Timer()
-
             mainTimer.schedule(MyTimerTask(), 0, 100)
         }
 
         btnStop.setOnClickListener {
             enabled = false
             lastElapsedTime = "0:0.0"
-
             mainTimer.cancel()
         }
 
         btnReset.setOnClickListener {
             enabled = false
             lastElapsedTime = "0:0.0"
-
             mainTimer.cancel()
 
             tvStopwatch.text = "0:0.0"
         }
-
     }
 
     fun getTimeToDisplay(new: Long = System.currentTimeMillis(), old: Long): String {
@@ -55,23 +53,14 @@ class StopwatchActivity : AppCompatActivity() {
         return "$minutes:$seconds.$deciseconds"
     }
 
-    var lastElapsedTime = "0:0.0"
-    private var enabled = false
-
-
     inner class MyTimerTask : TimerTask() {
         var now = System.currentTimeMillis()
         override fun run() {
-            runOnUiThread {
-                tvStopwatch.text = getTimeToDisplay(old = now)
-            }
+            runOnUiThread { tvStopwatch.text = getTimeToDisplay(old = now) }
         }
     }
 
-    private lateinit var mainTimer: Timer
-
     private fun createTimeEntry(now: Long) {
-
         val myTimeView = layoutInflater.inflate(R.layout.time_row, null, false)
 
         var stopwatchText = tvStopwatch.text
@@ -82,11 +71,7 @@ class StopwatchActivity : AppCompatActivity() {
             myTimeView.tvTime.text = getTimeToDisplay(now, lastElapsedTime.toLong())
             lastElapsedTime = now.toString()
         }
-
-        myTimeView.btnDelete.setOnClickListener {
-            layoutContent.removeView(myTimeView)
-        }
-
+        myTimeView.btnDelete.setOnClickListener { layoutContent.removeView(myTimeView) }
         layoutContent.addView(myTimeView, 0)
     }
 
@@ -96,8 +81,5 @@ class StopwatchActivity : AppCompatActivity() {
             mainTimer.cancel()
         }
         enabled = false
-
-
     }
-
 }

@@ -37,7 +37,6 @@ class WorkoutAdapter : RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
         viewHolder.name.text = exercise.name
     }
 
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.name
     }

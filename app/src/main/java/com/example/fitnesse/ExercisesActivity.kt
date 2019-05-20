@@ -107,7 +107,8 @@ class ExercisesActivity : AppCompatActivity() {
     private fun initExercises() {
         val db = FirebaseFirestore.getInstance()
 
-        val query = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        val query = db.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises")
 
         var allExercisesListener = query.addSnapshotListener(
@@ -174,7 +175,5 @@ class ExercisesActivity : AppCompatActivity() {
                 dialog.dismiss()
             }
             .show()
-
     }
-
 }

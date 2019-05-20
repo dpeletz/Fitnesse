@@ -67,7 +67,6 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun addOrUpdateUser() {
-
         var usersCollection = FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
             .collection("user")
@@ -91,7 +90,6 @@ class ProfileActivity : AppCompatActivity() {
                 addUserToCollection(usersCollection)
             }
         }
-
     }
 
     private fun loadUser() {
@@ -112,7 +110,6 @@ class ProfileActivity : AppCompatActivity() {
                     etBMI.text = (user.get(0).weight / (user.get(0).height * user.get(0).height)).toString() +
                             " kg / m^2"
                 }
-
             }
         }
     }

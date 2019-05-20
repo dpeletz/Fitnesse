@@ -128,6 +128,4 @@ class WorkoutsAdapter(
             }
             .show()
     }
-
-
 }
