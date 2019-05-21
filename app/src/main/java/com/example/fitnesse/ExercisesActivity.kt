@@ -1,8 +1,9 @@
 package com.example.fitnesse
 
-import android.support.v7.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
@@ -12,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_exercises.*
-import kotlinx.android.synthetic.main.activity_exercises.navigation
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import java.util.*
 
@@ -26,8 +26,7 @@ class ExercisesActivity : AppCompatActivity() {
 
         populateExerciseItems()
         exercisesAdapter = ExercisesAdapter(
-            this,
-            FirebaseAuth.getInstance().currentUser!!.uid
+            this
         )
         btn_add_exercise.setOnClickListener { addFragmentPopup() }
     }
@@ -46,7 +45,7 @@ class ExercisesActivity : AppCompatActivity() {
     }
 
     private fun addExercise(exercise: Exercise) {
-        var exercisesCollection =
+        val exercisesCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
@@ -116,8 +115,8 @@ class ExercisesActivity : AppCompatActivity() {
                         return
                     }
 
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
+                    for (dc in querySnapshot!!.documentChanges) {
+                        when (dc.type) {
                             DocumentChange.Type.ADDED -> {
                                 val exercise = dc.document.toObject(Exercise::class.java)
 
@@ -136,6 +135,7 @@ class ExercisesActivity : AppCompatActivity() {
             })
     }
 
+    @SuppressLint("InflateParams")
     private fun addFragmentPopup() {
         val view = layoutInflater.inflate(R.layout.add_edit_exercise, null)
 

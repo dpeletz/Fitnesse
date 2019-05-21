@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
@@ -14,7 +15,6 @@ import kotlinx.android.synthetic.main.exercise_name_item.view.*
 
 class AddExerciseAdapter(
     private val context: Context,
-    private val uId: String,
     private val dialog: AlertDialog
 ) : RecyclerView.Adapter<AddExerciseAdapter.ViewHolder>() {
 
@@ -25,7 +25,7 @@ class AddExerciseAdapter(
         viewGroup: ViewGroup,
         viewType: Int
     ): ViewHolder {
-        var itemRowView = LayoutInflater.from(context).inflate(
+        val itemRowView = LayoutInflater.from(context).inflate(
             R.layout.exercise_name_item, viewGroup, false
         )
         return ViewHolder(itemRowView)
@@ -44,7 +44,7 @@ class AddExerciseAdapter(
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val btnExercise = itemView.btnExercise
+        val btnExercise: Button = itemView.btnExercise
     }
 
     fun addExercise(exercise: Exercise, key: String) {
@@ -55,7 +55,7 @@ class AddExerciseAdapter(
 
     fun removeExercise(index: Int) {
         FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises").document(exerciseKeys[index]).delete()
 
         exercises.removeAt(index)

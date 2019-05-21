@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/manageItemLayout"
+        xmlns:tools="http://schemas.android.com/tools" android:id="@+id/manageItemLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -12,7 +12,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create_new_exercise"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:id="@+id/tvAddEditPrompt"/>
 
     <android.support.design.widget.TextInputLayout
@@ -70,12 +70,12 @@
                     android:id="@+id/reps_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" tools:targetApi="cupcake"/>
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/secs_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"/>
+                    android:inputType="number" tools:targetApi="cupcake"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -88,7 +88,7 @@
                 android:id="@+id/sets_et"
                 android:inputType="number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content" tools:targetApi="cupcake"/>
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

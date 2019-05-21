@@ -28,25 +28,25 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="@string/start"/>
+                android:text="@string/start" tools:targetApi="o"/>
         <Button
                 android:id="@+id/btnStop"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="@string/stop"/>
+                android:text="@string/stop" tools:targetApi="o"/>
         <Button
                 android:id="@+id/btnMark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="@string/mark"/>
+                android:text="@string/mark" tools:ignore="ButtonStyle" tools:targetApi="o"/>
         <Button
                 android:id="@+id/btnReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="5dp"
-                android:text="@string/reset"/>
+                android:text="@string/reset" tools:targetApi="o" tools:ignore="ButtonStyle"/>
     </LinearLayout>
 
     <ScrollView android:layout_width="match_parent"

@@ -2,11 +2,11 @@ package com.example.fitnesse
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_login.*
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
         btnSignIn.setOnClickListener { loginClick() }
     }
 
-    fun registerClick() {
+    private fun registerClick() {
         if (returnIfFormNotValid()) return
 
         FirebaseAuth.getInstance().createUserWithEmailAndPassword(
@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun loginClick() {
+    private fun loginClick() {
         if (returnIfFormNotValid()) return
 
         FirebaseAuth.getInstance().signInWithEmailAndPassword(

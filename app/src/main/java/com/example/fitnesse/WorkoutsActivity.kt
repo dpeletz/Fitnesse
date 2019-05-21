@@ -1,8 +1,9 @@
 package com.example.fitnesse
 
-import android.support.v7.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.example.fitnesse.adapter.WorkoutsAdapter
@@ -12,7 +13,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_workouts.*
-import kotlinx.android.synthetic.main.activity_workouts.recyclerList
 import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import java.util.*
 
@@ -26,8 +26,7 @@ class WorkoutsActivity : AppCompatActivity() {
         ManageBottomNavbar.setupNavbar(this@WorkoutsActivity, navigation)
         populateWorkoutItems()
         workoutsAdapter = WorkoutsAdapter(
-            this,
-            FirebaseAuth.getInstance().currentUser!!.uid
+            this
         )
         btn_add_workout.setOnClickListener { addFragmentPopup() }
     }
@@ -62,7 +61,7 @@ class WorkoutsActivity : AppCompatActivity() {
             1,
             description
         )
-        var workoutsCollection =
+        val workoutsCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("workouts")
@@ -93,8 +92,8 @@ class WorkoutsActivity : AppCompatActivity() {
                         Toast.makeText(this@WorkoutsActivity, "listen error: ${e.message}", Toast.LENGTH_LONG).show()
                         return
                     }
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
+                    for (dc in querySnapshot!!.documentChanges) {
+                        when (dc.type) {
                             DocumentChange.Type.ADDED -> {
                                 val workout = dc.document.toObject(Workout::class.java)
                                 workoutsAdapter.addWorkout(workout, dc.document.id)
@@ -112,6 +111,7 @@ class WorkoutsActivity : AppCompatActivity() {
             })
     }
 
+    @SuppressLint("InflateParams")
     private fun addFragmentPopup() {
         val view = layoutInflater.inflate(R.layout.add_edit_workout, null)
         AlertDialog.Builder(this)

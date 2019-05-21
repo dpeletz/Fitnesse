@@ -1,14 +1,15 @@
 package com.example.fitnesse
 
-import android.support.v7.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_stopwatch.*
 import kotlinx.android.synthetic.main.time_row.view.*
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 class StopwatchActivity : AppCompatActivity() {
-    var lastElapsedTime = "0:0.0"
+    private var lastElapsedTime = "0:0.0"
     private var enabled = false
     private lateinit var mainTimer: Timer
 
@@ -18,7 +19,7 @@ class StopwatchActivity : AppCompatActivity() {
         ManageBottomNavbar.setupNavbar(this@StopwatchActivity, navigation)
 
         btnMark.setOnClickListener {
-            var now = System.currentTimeMillis()
+            val now = System.currentTimeMillis()
             createTimeEntry(now)
         }
         btnStart.setOnClickListener {
@@ -48,7 +49,7 @@ class StopwatchActivity : AppCompatActivity() {
     }
 
     inner class MyTimerTask : TimerTask() {
-        var now = System.currentTimeMillis()
+        private var now = System.currentTimeMillis()
         override fun run() {
             runOnUiThread { tvStopwatch.text = getTimeToDisplay(old = now) }
         }
@@ -63,10 +64,11 @@ class StopwatchActivity : AppCompatActivity() {
         return "$minutes:$seconds.$deciseconds"
     }
 
+    @SuppressLint("InflateParams")
     private fun createTimeEntry(now: Long) {
         val myTimeView = layoutInflater.inflate(R.layout.time_row, null, false)
 
-        var stopwatchText = tvStopwatch.text
+        val stopwatchText = tvStopwatch.text
         if (lastElapsedTime == "0:0.0") {
             myTimeView.tvTime.text = stopwatchText
             lastElapsedTime = now.toString()

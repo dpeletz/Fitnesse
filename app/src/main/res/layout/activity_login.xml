@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--suppress XmlUnusedNamespaceDeclaration -->
 <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -40,9 +41,9 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:hint="@string/email"
-            android:text="caroline.e.okun@gmail.com"
+            android:text="@string/caroline_e_okun_gmail_com"
             android:inputType="textEmailAddress"
-            android:id="@+id/tilEmail">
+            android:id="@+id/tilEmail" tools:targetApi="o">
     </com.rengwuxian.materialedittext.MaterialEditText>
 
     <com.rengwuxian.materialedittext.MaterialEditText
@@ -54,8 +55,8 @@
             android:layout_marginHorizontal="20dp"
             android:inputType="textPassword"
             android:hint="@string/password"
-            android:text="12345678"
-            android:id="@+id/tilPassword">
+            android:text="@string/_12345678"
+            android:id="@+id/tilPassword" tools:targetApi="o">
     </com.rengwuxian.materialedittext.MaterialEditText>
 
     <com.gc.materialdesign.views.ButtonRectangle
@@ -66,7 +67,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:text="@string/sign_in"
-            android:id="@+id/btnSignIn"/>
+            android:id="@+id/btnSignIn" tools:targetApi="o"/>
 
     <View
             android:layout_width="150dp"
@@ -105,7 +106,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:text="@string/register"
-            android:id="@+id/btnRegister"/>
+            android:id="@+id/btnRegister" tools:targetApi="o"/>
 
     <TextView
             android:layout_width="wrap_content"
@@ -115,6 +116,6 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:id="@+id/tvOR"
-            android:text="OR"/>
+            android:text="@string/or"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -8,14 +8,16 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.example.fitnesse.data.Exercise
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_graph.*
 
 class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    var spinner: Spinner? = null
+    private var spinner: Spinner? = null
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         // TODO: allow graph to just be first exercise in list (if one exists)
@@ -25,8 +27,8 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // TODO: switch graph to the selected exercise
-        var selectedExerciseName = parent!!.getItemAtPosition(position)
-        var exercisesCollection =
+        val selectedExerciseName = parent!!.getItemAtPosition(position)
+        val exercisesCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
@@ -40,7 +42,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         setUpGenericChart()
         spinner = this.spinnerGraphType
-        spinner!!.setOnItemSelectedListener(this)
+        spinner!!.onItemSelectedListener = this
         setUpExerciseSpinner()
     }
 
@@ -51,7 +53,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         exercisesCollection
             .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
                 val exercise = documentSnapshot.toObjects(Exercise::class.java)
-                var recordList = exercise.first().recordList
+                val recordList = exercise.first().recordList
                 val entries = ArrayList<Entry>()
                 recordList.forEach { r -> entries.add(Entry(recordList.indexOf(r).toFloat(), r.toFloat())) }
                 setLineChart(entries, exercise.first().name)
@@ -60,7 +62,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun setUpExerciseSpinner() {
         val exercisesCollection = FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises")
 
         exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
@@ -68,10 +70,10 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             // TODO: potentially add in check to verify that at least 1 exercise is in list
             val exerciseNameList = ArrayList<String>(exerciseList.size)
-            exerciseList.forEach { it -> exerciseNameList.add(it.name) }
+            exerciseList.forEach { exerciseNameList.add(it.name) }
             val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner!!.setAdapter(aa)
+            spinner!!.adapter = aa
         }
     }
 
@@ -110,8 +112,8 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setGraphAxes() {
-        val leftAxis = lineChart.getAxisLeft()
-        val rightAxis = lineChart.getAxisRight()
+        val leftAxis = lineChart.axisLeft
+        val rightAxis = lineChart.axisRight
         leftAxis.axisMinimum = 0F
         leftAxis.axisMaximum = 250F
         rightAxis.axisMinimum = 0F

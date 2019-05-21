@@ -1,8 +1,9 @@
 package com.example.fitnesse
 
-import android.support.v7.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.Toast
@@ -11,13 +12,11 @@ import com.example.fitnesse.adapter.WorkoutAdapter
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.android.synthetic.main.activity_workout.btn_add_exercise
-import kotlinx.android.synthetic.main.activity_workout.navigation
-import kotlinx.android.synthetic.main.activity_workout.recyclerList
+import kotlinx.android.synthetic.main.activity_workout.*
 import kotlinx.android.synthetic.main.add_exercise_in_workout.view.*
 
 class WorkoutActivity : AppCompatActivity() {
-    lateinit var workoutAdapter: WorkoutAdapter
+    private lateinit var workoutAdapter: WorkoutAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +37,7 @@ class WorkoutActivity : AppCompatActivity() {
                     .document(FirebaseAuth.getInstance().currentUser!!.uid)
                     .collection("exercises")
 
-            var listItems: List<Exercise> =
+            val listItems: List<Exercise> =
                 listOf(Exercise(userID = FirebaseAuth.getInstance().currentUser!!.uid, name = "chest press"))
 
 //            listItems = FirebaseFirestore.getInstance().collection("users")
@@ -63,6 +62,7 @@ class WorkoutActivity : AppCompatActivity() {
         }.start()
     }
 
+    @SuppressLint("InflateParams")
     private fun addFragmentPopup() {
         val view = layoutInflater.inflate(R.layout.add_exercise_in_workout, null)
 
@@ -72,7 +72,7 @@ class WorkoutActivity : AppCompatActivity() {
                 dialog.dismiss()
             }.show()
 
-        var exercisesAdapter = AddExerciseAdapter(this, FirebaseAuth.getInstance().currentUser!!.uid, dialog)
+        val exercisesAdapter = AddExerciseAdapter(this, dialog)
         populateExerciseItems(exercisesAdapter, view)
     }
 
@@ -99,11 +99,10 @@ class WorkoutActivity : AppCompatActivity() {
                         return
                     }
 
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
+                    for (dc in querySnapshot!!.documentChanges) {
+                        when (dc.type) {
                             DocumentChange.Type.ADDED -> {
                                 val exercise = dc.document.toObject(Exercise::class.java)
-
                                 exercisesAdapter.addExercise(exercise, dc.document.id)
                             }
                             DocumentChange.Type.MODIFIED -> {

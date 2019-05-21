@@ -27,12 +27,10 @@ object ManageBottomNavbar {
             false
         }
 
-        if (context is MainActivity) {
-            navigation.selectedItemId = R.id.navigation_home
-        } else if (context is StopwatchActivity) {
-            navigation.selectedItemId = R.id.navigation_timer
-        } else if (context is ProfileActivity) {
-            navigation.selectedItemId = R.id.navigation_profile
+        when (context) {
+            is MainActivity -> navigation.selectedItemId = R.id.navigation_home
+            is StopwatchActivity -> navigation.selectedItemId = R.id.navigation_timer
+            is ProfileActivity -> navigation.selectedItemId = R.id.navigation_profile
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
