@@ -32,8 +32,7 @@ class ExercisesActivity : AppCompatActivity() {
         populateExerciseItems()
 
         exercisesAdapter = ExercisesAdapter(
-            this,
-            FirebaseAuth.getInstance().currentUser!!.uid
+            this
         )
 
         btn_add_exercise.setOnClickListener {
@@ -166,6 +165,7 @@ class ExercisesActivity : AppCompatActivity() {
                 } else if (radioButton == R.id.rb_secs) {
                     exercise.value = view.secs_et.text!!.toString().toInt()
                 }
+                exercise.recordList = listOf(exercise.value)
                 addExercise(exercise)
 
                 dialog.dismiss()

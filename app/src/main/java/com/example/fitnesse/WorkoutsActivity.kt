@@ -98,7 +98,7 @@ class WorkoutsActivity : AppCompatActivity() {
                 this@WorkoutsActivity,
                 "Workout saved", Toast.LENGTH_LONG
             ).show()
-
+            workout.workoutID = it.id
         }.addOnFailureListener {
             Toast.makeText(
                 this@WorkoutsActivity,

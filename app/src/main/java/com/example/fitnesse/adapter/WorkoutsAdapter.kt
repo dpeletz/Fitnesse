@@ -44,7 +44,10 @@ class WorkoutsAdapter(
 
         viewHolder.name.text = workout.name
         viewHolder.btnView.setOnClickListener {
-            context.startActivity(Intent(context, WorkoutActivity::class.java))
+            val intent = Intent(context, WorkoutActivity::class.java)
+            intent.putExtra("workoutID", workout.workoutID)
+            intent.putExtra("workoutName", workout.name)
+            context.startActivity(intent)
         }
         viewHolder.btnDeleteWorkout.setOnClickListener {
             removeWorkout(viewHolder.adapterPosition)

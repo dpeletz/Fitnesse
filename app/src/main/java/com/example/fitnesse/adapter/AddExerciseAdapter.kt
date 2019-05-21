@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
@@ -15,8 +16,9 @@ import kotlinx.android.synthetic.main.exercise_name_item.view.*
 
 class AddExerciseAdapter(
     private val context: Context,
-    private val uId: String,
-    private val dialog: AlertDialog
+    private val dialog: AlertDialog,
+    private val workoutID: String,
+    private val workoutAdapter: WorkoutAdapter
 ) : RecyclerView.Adapter<AddExerciseAdapter.ViewHolder>() {
 
     private var exercises = mutableListOf<Exercise>()
@@ -39,10 +41,30 @@ class AddExerciseAdapter(
         val exercise = exercises[position]
 
         viewHolder.btnExercise.text = exercise.name
-        viewHolder.btnExercise.setOnClickListener{
-            //TODO: ADD CLICKED EXERCISE
-            dialog.dismiss()
+        viewHolder.btnExercise.setOnClickListener {
+            addExerciseToDB(exercise)
         }
+    }
+
+     private fun addExerciseToDB(exercise: Exercise) {
+        var exercisesCollection =
+            FirebaseFirestore.getInstance().collection("users")
+                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+                .collection("workouts")
+                .document(workoutID)
+                .collection("exercises")
+
+        exercisesCollection.add(
+            exercise
+        ).addOnSuccessListener {
+            //workoutAdapter.addExercise(exercise, exercise.exerciseID)
+        }.addOnFailureListener {
+            Toast.makeText(
+                context,
+                "Error: ${it.message}", Toast.LENGTH_LONG
+            ).show()
+        }
+        dialog.dismiss()
     }
 
 
