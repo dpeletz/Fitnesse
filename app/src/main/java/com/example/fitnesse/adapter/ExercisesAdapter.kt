@@ -60,7 +60,8 @@ class ExercisesAdapter(private val context: Context) :
     private fun removeExercise(index: Int) {
         FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .collection("exercises").document(exerciseKeys[index]).delete()
+            .collection("exercises")
+            .document(exerciseKeys[index]).delete()
 
         removeByIndex(index)
     }

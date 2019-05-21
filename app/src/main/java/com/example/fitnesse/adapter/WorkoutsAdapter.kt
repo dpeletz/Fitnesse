@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.example.fitnesse.R
 import com.example.fitnesse.WorkoutActivity
 import com.example.fitnesse.data.Workout
+import com.example.fitnesse.preferences.DataModel
 import com.gc.materialdesign.views.ButtonIcon
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -38,7 +39,10 @@ class WorkoutsAdapter(private val context: Context) :
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val workout = workouts[position]
         viewHolder.name.text = workout.name
-        viewHolder.btnView.setOnClickListener { context.startActivity(Intent(context, WorkoutActivity::class.java)) }
+        viewHolder.btnView.setOnClickListener {
+            DataModel.selectedWorkout = workout
+            context.startActivity(Intent(context, WorkoutActivity::class.java))
+        }
         viewHolder.btnDeleteWorkout.setOnClickListener { removeWorkout(viewHolder.adapterPosition) }
         viewHolder.btnEditWorkout.setOnClickListener { editFragmentPopup(position) }
     }

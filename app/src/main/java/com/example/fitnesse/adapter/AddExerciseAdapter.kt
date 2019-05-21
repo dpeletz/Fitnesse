@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import com.example.fitnesse.R
+import com.example.fitnesse.WorkoutActivity
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +32,9 @@ class AddExerciseAdapter(
         return ViewHolder(itemRowView)
     }
 
-    override fun getItemCount(): Int { return exercises.size }
+    override fun getItemCount(): Int {
+        return exercises.size
+    }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val exercise = exercises[position]
@@ -39,6 +42,9 @@ class AddExerciseAdapter(
         viewHolder.btnExercise.text = exercise.name
         viewHolder.btnExercise.setOnClickListener {
             //TODO: ADD CLICKED EXERCISE
+            //DataModel.selectedWorkout?.exercises!!.plus(exercise)
+            (context as WorkoutActivity).addExercise(exercise)
+
             dialog.dismiss()
         }
     }

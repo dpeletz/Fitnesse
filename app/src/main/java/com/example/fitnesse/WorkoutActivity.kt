@@ -10,6 +10,9 @@ import android.widget.Toast
 import com.example.fitnesse.adapter.AddExerciseAdapter
 import com.example.fitnesse.adapter.WorkoutAdapter
 import com.example.fitnesse.data.Exercise
+import com.example.fitnesse.preferences.DataModel
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_workout.*
@@ -22,6 +25,10 @@ class WorkoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
         ManageBottomNavbar.setupNavbar(this@WorkoutActivity, navigation)
+
+        DataModel.selectedWorkout!!.exercises =
+            DataModel.selectedWorkout!!.exercises.plus(Exercise(name = "Chest Press"))
+        workoutAdapter = WorkoutAdapter(this, DataModel.selectedWorkout!!.exercises)
 
         populateExercises()
         btn_add_exercise.setOnClickListener { addFragmentPopup() }
@@ -37,9 +44,6 @@ class WorkoutActivity : AppCompatActivity() {
                     .document(FirebaseAuth.getInstance().currentUser!!.uid)
                     .collection("exercises")
 
-            val listItems: List<Exercise> =
-                listOf(Exercise(userID = FirebaseAuth.getInstance().currentUser!!.uid, name = "chest press"))
-
 //            listItems = FirebaseFirestore.getInstance().collection("users")
 //                .document(FirebaseAuth.getInstance().currentUser!!.uid)
 //                .collection("workouts")
@@ -53,13 +57,17 @@ class WorkoutActivity : AppCompatActivity() {
 //            }
 
             runOnUiThread {
-                workoutAdapter = WorkoutAdapter(this, listItems)
-
                 recyclerList.layoutManager = LinearLayoutManager(this)
                 recyclerList.adapter = workoutAdapter
             }
 
         }.start()
+    }
+
+    override fun onBackPressed() {
+        DataModel.selectedWorkout?.exercises = listOf()
+        DataModel.selectedWorkout = null
+        super.onBackPressed()
     }
 
     @SuppressLint("InflateParams")
@@ -74,6 +82,21 @@ class WorkoutActivity : AppCompatActivity() {
 
         val exercisesAdapter = AddExerciseAdapter(this, dialog)
         populateExerciseItems(exercisesAdapter, view)
+    }
+
+    fun addExercise(exercise: Exercise) {
+
+        val query = FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection("workouts")
+            .document("7NDTZtpwCjckOejmYNAl")
+            .collection("exercises").add(exercise).addOnCompleteListener(
+                object : OnCompleteListener<DocumentReference> {
+                    override fun onComplete(p0: Task<DocumentReference>) {
+                        workoutAdapter.addExerciseToWorkout(exercise, p0.result!!.id)
+                    }
+                }
+            )
     }
 
     private fun populateExerciseItems(exercisesAdapter: AddExerciseAdapter, view: View) {
