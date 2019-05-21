@@ -11,7 +11,6 @@ import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
-
     private val genderArray = arrayOf("M", "F")
     var editMode = true
     lateinit var editTexts: List<TextInputEditText>
@@ -21,14 +20,11 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         ManageBottomNavbar.setupNavbar(this@ProfileActivity, navigation)
-
         user = User(
             email = FirebaseAuth.getInstance().currentUser!!.email.toString(),
             userID = FirebaseAuth.getInstance().currentUser!!.uid
         )
-
         loadUser()
-
         editTexts = listOf<TextInputEditText>(
             etName,
             etGender,
@@ -36,21 +32,17 @@ class ProfileActivity : AppCompatActivity() {
             etHeight,
             etWeight
         )
-
         switchEditMode()
-
         btnEdit.setOnClickListener {
             if (btnEdit.text == "save") {
                 sendValuesToFirebase()
             }
             switchEditMode()
         }
-
     }
 
     private fun sendValuesToFirebase() {
         //TODO: SHOULD WE ALLOW EMPTY VALUES???
-
         user.weight = etWeight.text.toString().toFloat()
         user.height = etHeight.text.toString().toFloat()
         user.gender = genderArray.indexOf(etGender.text.toString().toUpperCase())
@@ -59,10 +51,8 @@ class ProfileActivity : AppCompatActivity() {
 
         if (etWeight.text.toString().toFloat() != 0F) {
             Log.d("height", user.height.toString())
-            etBMI.text = (user.weight / (user.height * user.height)).toString() +
-                    " kg / m^2"
+            etBMI.text = (user.weight / (user.height * user.height)).toString() + " kg / m^2"
         }
-
         addOrUpdateUser()
     }
 
@@ -85,7 +75,6 @@ class ProfileActivity : AppCompatActivity() {
                             "name" to etName.text.toString()
                         ))
                     )
-
             } else {
                 addUserToCollection(usersCollection)
             }
@@ -107,17 +96,15 @@ class ProfileActivity : AppCompatActivity() {
                 etAge.setText(user.get(0).age.toString())
 
                 if (user.get(0).weight != 0F) {
-                    etBMI.text = (user.get(0).weight / (user.get(0).height * user.get(0).height)).toString() +
-                            " kg / m^2"
+                    etBMI.text =
+                        (user.get(0).weight / (user.get(0).height * user.get(0).height)).toString() + " kg / m^2"
                 }
             }
         }
     }
 
     private fun addUserToCollection(usersCollection: CollectionReference) {
-        usersCollection.add(
-            user
-        ).addOnSuccessListener {
+        usersCollection.add(user).addOnSuccessListener {
             Toast.makeText(
                 this@ProfileActivity,
                 "User saved", Toast.LENGTH_LONG

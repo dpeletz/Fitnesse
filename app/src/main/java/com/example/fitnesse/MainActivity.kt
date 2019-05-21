@@ -2,14 +2,10 @@ package com.example.fitnesse
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
-import com.example.fitnesse.data.User
-import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,15 +16,12 @@ class MainActivity : AppCompatActivity() {
         btnWorkouts.setOnClickListener {
             startActivity(Intent(this@MainActivity, WorkoutsActivity::class.java))
         }
-
         btnExercises.setOnClickListener {
             startActivity(Intent(this@MainActivity, ExercisesActivity::class.java))
         }
-
-        btnProfile.setOnClickListener{
+        btnProfile.setOnClickListener {
             startActivity(Intent(this@MainActivity, ProfileActivity::class.java))
         }
-
         btnGraphs.setOnClickListener {
             startActivity(Intent(this@MainActivity, GraphActivity::class.java))
         }

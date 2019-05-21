@@ -45,6 +45,10 @@
     <string name="m">m</string>
     <string name="workouts">WORKOUTS</string>
     <string name="exercises">EXERCISES</string>
+    <string name="set_count">Set Count:</string>
+    <string name="exercise_name">Exercise Name</string>
+    <string name="delete">Delete</string>
+    <string name="workout_name">Workout Name</string>
     <string-array name="graphs_spinner_array">
         <item>Exercise 1</item>
         <item>Exercise 2</item>

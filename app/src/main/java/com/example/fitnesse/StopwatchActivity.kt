@@ -15,32 +15,42 @@ class StopwatchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
-
         ManageBottomNavbar.setupNavbar(this@StopwatchActivity, navigation)
 
         btnMark.setOnClickListener {
             var now = System.currentTimeMillis()
             createTimeEntry(now)
         }
-
         btnStart.setOnClickListener {
             enabled = true
             mainTimer = Timer()
             mainTimer.schedule(MyTimerTask(), 0, 100)
         }
-
         btnStop.setOnClickListener {
             enabled = false
             lastElapsedTime = "0:0.0"
             mainTimer.cancel()
         }
-
         btnReset.setOnClickListener {
             enabled = false
             lastElapsedTime = "0:0.0"
             mainTimer.cancel()
-
             tvStopwatch.text = "0:0.0"
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (enabled) {
+            mainTimer.cancel()
+        }
+        enabled = false
+    }
+
+    inner class MyTimerTask : TimerTask() {
+        var now = System.currentTimeMillis()
+        override fun run() {
+            runOnUiThread { tvStopwatch.text = getTimeToDisplay(old = now) }
         }
     }
 
@@ -51,13 +61,6 @@ class StopwatchActivity : AppCompatActivity() {
         val deciseconds = (TimeUnit.MILLISECONDS.toMicros(difference) / 100000) - (10 * seconds) - (600 * minutes)
 
         return "$minutes:$seconds.$deciseconds"
-    }
-
-    inner class MyTimerTask : TimerTask() {
-        var now = System.currentTimeMillis()
-        override fun run() {
-            runOnUiThread { tvStopwatch.text = getTimeToDisplay(old = now) }
-        }
     }
 
     private fun createTimeEntry(now: Long) {
@@ -73,13 +76,5 @@ class StopwatchActivity : AppCompatActivity() {
         }
         myTimeView.btnDelete.setOnClickListener { layoutContent.removeView(myTimeView) }
         layoutContent.addView(myTimeView, 0)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        if (enabled) {
-            mainTimer.cancel()
-        }
-        enabled = false
     }
 }

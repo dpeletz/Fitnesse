@@ -10,6 +10,7 @@ import com.example.fitnesse.data.Exercise
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_graph.*
 
@@ -25,26 +26,11 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         // TODO: switch graph to the selected exercise
         var selectedExerciseName = parent!!.getItemAtPosition(position)
-        println(selectedExerciseName)
-        println("----------")
         var exercisesCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
-
-        exercisesCollection
-            .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
-                val exercise = documentSnapshot.toObjects(Exercise::class.java)
-
-                var recordList = exercise.first().recordList
-
-                val entries = ArrayList<Entry>()
-
-                recordList.forEach { r -> entries.add(Entry(recordList.indexOf(r).toFloat(), r.toFloat())) }
-
-                setLineChart(entries, exercise.first().name)
-
-            }
+        queryExercisesCollection(exercisesCollection, selectedExerciseName)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +38,44 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(R.layout.activity_graph)
         ManageBottomNavbar.setupNavbar(this@GraphActivity, navigation)
 
+        setUpGenericChart()
+        spinner = this.spinnerGraphType
+        spinner!!.setOnItemSelectedListener(this)
+        setUpExerciseSpinner()
+    }
+
+    private fun queryExercisesCollection(
+        exercisesCollection: CollectionReference,
+        selectedExerciseName: Any?
+    ) {
+        exercisesCollection
+            .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
+                val exercise = documentSnapshot.toObjects(Exercise::class.java)
+                var recordList = exercise.first().recordList
+                val entries = ArrayList<Entry>()
+                recordList.forEach { r -> entries.add(Entry(recordList.indexOf(r).toFloat(), r.toFloat())) }
+                setLineChart(entries, exercise.first().name)
+            }
+    }
+
+    private fun setUpExerciseSpinner() {
+        val exercisesCollection = FirebaseFirestore.getInstance().collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
+            .collection("exercises")
+
+        exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
+            val exerciseList = documentSnapshot.toObjects(Exercise::class.java)
+
+            // TODO: potentially add in check to verify that at least 1 exercise is in list
+            val exerciseNameList = ArrayList<String>(exerciseList.size)
+            exerciseList.forEach { it -> exerciseNameList.add(it.name) }
+            val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner!!.setAdapter(aa)
+        }
+    }
+
+    private fun setUpGenericChart() {
         val entries = ArrayList<Entry>()
 
         entries.add(Entry(1f, 135F))
@@ -64,41 +88,28 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         entries.add(Entry(8f, 225F))
         entries.add(Entry(9f, 235F))
         setLineChart(entries, "initial")
-
-        spinner = this.spinnerGraphType
-        spinner!!.setOnItemSelectedListener(this)
-
-        val exercisesCollection = FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
-            .collection("exercises")
-
-        exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
-            val exerciseList = documentSnapshot.toObjects(Exercise::class.java)
-
-            // TODO: potentially add in check to verify that at least 1 exercise is in list
-            val exerciseNameList = ArrayList<String>(exerciseList.size)
-            exerciseList.forEach { it -> exerciseNameList.add(it.name) }
-
-            val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner!!.setAdapter(aa)
-        }
     }
 
     private fun setLineChart(entries: ArrayList<Entry>, name: String) {
         val lineDataSet = LineDataSet(entries, "Cells")
-
         val data = LineData(lineDataSet)
+        setUpLineChart(data, name, lineDataSet)
+        setGraphAxes()
+    }
 
+    private fun setUpLineChart(
+        data: LineData,
+        name: String,
+        lineDataSet: LineDataSet
+    ) {
         lineChart.data = data // set the data and list of labels into chart
-
         // TODO: set chart description
         lineChart.description.text = "Line Chart of $name"
-
         lineDataSet.color = resources.getColor(R.color.colorPrimary)
-
         lineChart.animateY(5000)
+    }
 
+    private fun setGraphAxes() {
         val leftAxis = lineChart.getAxisLeft()
         val rightAxis = lineChart.getAxisRight()
         leftAxis.axisMinimum = 0F

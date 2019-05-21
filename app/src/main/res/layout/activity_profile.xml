@@ -37,9 +37,7 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:text="@string/edit"
                 android:id="@+id/btnEdit"
-                android:layout_marginHorizontal="15dp"
-        />
-
+                android:layout_marginHorizontal="15dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,18 +47,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/btnEdit"
                 android:layout_marginTop="20dp"
                 android:textSize="17sp"
-                android:layout_marginLeft="20dp"
-        />
-
+                android:layout_marginLeft="20dp"/>
         <android.support.design.widget.TextInputEditText
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/etName"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tvName"
-        />
-
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvName"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,9 +64,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvName"
                 android:textSize="17sp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-        />
-
+                android:layout_marginTop="20dp"/>
         <android.support.design.widget.TextInputEditText
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
@@ -81,9 +73,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvGender"
                 android:hint="M/F"
-                android:maxLength="1"
-        />
-
+                android:maxLength="1"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -93,9 +83,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvGender"
                 android:textSize="17sp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="40dp"
-        />
-
+                android:layout_marginTop="40dp"/>
         <android.support.design.widget.TextInputEditText
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
@@ -103,9 +91,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvAge"
-                android:inputType="number"
-        />
-
+                android:inputType="number"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -115,17 +101,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvAge"
                 android:textSize="17sp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginTop="20dp"
-        />
-
+                android:layout_marginTop="20dp"/>
         <android.support.design.widget.TextInputEditText
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/etHeight"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tvHeight"
-        />
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvHeight"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -135,9 +118,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvAge"
                 android:textSize="17sp"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="5dp"
-        />
-
+                android:layout_marginLeft="5dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -147,17 +128,14 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvHeight"
                 android:textSize="17sp"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="20dp"
-        />
-
+                android:layout_marginLeft="20dp"/>
         <android.support.design.widget.TextInputEditText
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/etWeight"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintBaseline_toBaselineOf="@+id/tvWeight"
-        />
+                app:layout_constraintBaseline_toBaselineOf="@+id/tvWeight"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -167,9 +145,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvHeight"
                 android:textSize="17sp"
                 android:layout_marginTop="20dp"
-                android:layout_marginLeft="5dp"
-        />
-
+                android:layout_marginLeft="5dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -179,9 +155,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/tvWeight"
                 android:textSize="17sp"
                 android:layout_marginLeft="20dp"
-                android:paddingTop="20dp"
-        />
-
+                android:paddingTop="20dp"/>
         <TextView
                 android:layout_width="180dp"
                 android:layout_height="wrap_content"
@@ -190,9 +164,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBaseline_toBaselineOf="@+id/tvBMI"
                 android:text="@string/dash"
-                android:textSize="17sp"
-        />
-
+                android:textSize="17sp"/>
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.BottomNavigationView
@@ -205,6 +177,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:menu="@menu/navigation" />
+            app:menu="@menu/navigation"/>
 
 </android.support.constraint.ConstraintLayout>

@@ -12,16 +12,13 @@
             android:layout_marginRight="10dp"
             android:src="@drawable/ic_av_timer"
             android:scaleType="fitXY"/>
-
     <TextView
             android:id="@+id/tvTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="22sp"
-    />
-
+            android:textSize="22sp"/>
     <Button android:id="@+id/btnDelete"
-            android:text="Delete"
+            android:text="@string/delete"
             android:layout_marginLeft="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>

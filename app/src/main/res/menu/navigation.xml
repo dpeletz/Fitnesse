@@ -5,15 +5,12 @@
             android:id="@+id/navigation_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/title_home"/>
-
     <item
             android:id="@+id/navigation_timer"
             android:icon="@drawable/ic_av_timer"
             android:title="@string/timer"/>
-
     <item
             android:id="@+id/navigation_profile"
             android:icon="@drawable/ic_person"
             android:title="@string/profile"/>
-
 </menu>

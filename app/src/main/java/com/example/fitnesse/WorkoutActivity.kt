@@ -4,25 +4,19 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.fitnesse.adapter.AddExerciseAdapter
-import com.example.fitnesse.adapter.ExercisesAdapter
 import com.example.fitnesse.adapter.WorkoutAdapter
 import com.example.fitnesse.data.Exercise
-import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
-import kotlinx.android.synthetic.main.activity_exercises.*
-import kotlinx.android.synthetic.main.activity_workout.*
 import kotlinx.android.synthetic.main.activity_workout.btn_add_exercise
 import kotlinx.android.synthetic.main.activity_workout.navigation
 import kotlinx.android.synthetic.main.activity_workout.recyclerList
 import kotlinx.android.synthetic.main.add_exercise_in_workout.view.*
 
 class WorkoutActivity : AppCompatActivity() {
-
     lateinit var workoutAdapter: WorkoutAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +25,7 @@ class WorkoutActivity : AppCompatActivity() {
         ManageBottomNavbar.setupNavbar(this@WorkoutActivity, navigation)
 
         populateExercises()
-
-        btn_add_exercise.setOnClickListener {
-            addFragmentPopup()
-        }
+        btn_add_exercise.setOnClickListener { addFragmentPopup() }
     }
 
     private fun populateExercises() {
@@ -50,7 +41,9 @@ class WorkoutActivity : AppCompatActivity() {
             var listItems: List<Exercise> =
                 listOf(Exercise(userID = FirebaseAuth.getInstance().currentUser!!.uid, name = "chest press"))
 
-
+//            listItems = FirebaseFirestore.getInstance().collection("users")
+//                .document(FirebaseAuth.getInstance().currentUser!!.uid)
+//                .collection("workouts")
 // CODE BELOW SHOWS HOW TO QUERY THE EXERCISES LIST AND SEE IF THERE IS MORE THAN 1 EXERCISE:
 //
 //            exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
@@ -73,7 +66,6 @@ class WorkoutActivity : AppCompatActivity() {
     private fun addFragmentPopup() {
         val view = layoutInflater.inflate(R.layout.add_exercise_in_workout, null)
 
-
         val dialog = AlertDialog.Builder(this)
             .setView(view)
             .setNegativeButton("Cancel") { dialog, which ->
@@ -81,29 +73,24 @@ class WorkoutActivity : AppCompatActivity() {
             }.show()
 
         var exercisesAdapter = AddExerciseAdapter(this, FirebaseAuth.getInstance().currentUser!!.uid, dialog)
-
         populateExerciseItems(exercisesAdapter, view)
     }
 
     private fun populateExerciseItems(exercisesAdapter: AddExerciseAdapter, view: View) {
         Thread {
-
             initExercises(exercisesAdapter)
-
             runOnUiThread {
                 view.recyclerList.layoutManager = LinearLayoutManager(this)
                 view.recyclerList.adapter = exercisesAdapter
             }
-
         }.start()
     }
 
     private fun initExercises(exercisesAdapter: AddExerciseAdapter) {
         val db = FirebaseFirestore.getInstance()
-
-        val query = db.collection("users").document(FirebaseAuth.getInstance().currentUser!!.uid)
+        val query = db.collection("users")
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises")
-
         query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
                 override fun onEvent(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {

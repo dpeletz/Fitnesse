@@ -9,14 +9,13 @@ import android.view.ViewGroup
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
-class ExercisesAdapter(
-    private val context: Context,
-    private val uId: String
-) : RecyclerView.Adapter<ExercisesAdapter.ViewHolder>() {
+class ExercisesAdapter(private val context: Context, private val uId: String) :
+    RecyclerView.Adapter<ExercisesAdapter.ViewHolder>() {
 
     private var exercises = mutableListOf<Exercise>()
     private var exerciseKeys = mutableListOf<String>()
@@ -28,8 +27,25 @@ class ExercisesAdapter(
         return ViewHolder(itemRowView)
     }
 
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        val exercise = exercises[position]
+
+        viewHolder.name.text = exercise.name
+        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
+
+        viewHolder.btnDeleteExercise.setOnClickListener { removeExercise(viewHolder.adapterPosition) }
+
+        viewHolder.btnEditExercise.setOnClickListener { editFragmentPopup(position) }
+    }
+
     override fun getItemCount(): Int {
         return exercises.size
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val name = itemView.name
+        val btnDeleteExercise = itemView.btn_delete_workout
+        val btnEditExercise = itemView.btn_edit_workout
     }
 
     fun addExercise(exercise: Exercise, key: String) {
@@ -43,40 +59,20 @@ class ExercisesAdapter(
             .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
             .collection("exercises").document(exerciseKeys[index]).delete()
 
-        exercises.removeAt(index)
-        exerciseKeys.removeAt(index)
-        notifyItemRemoved(index)
+        removeByIndex(index)
     }
 
     fun removeExerciseByKey(key: String) {
         val index = exerciseKeys.indexOf(key)
         if (index != -1) {
-            exercises.removeAt(index)
-            exerciseKeys.removeAt(index)
-            notifyItemRemoved(index)
+            removeByIndex(index)
         }
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val exercise = exercises[position]
-
-        viewHolder.name.text = exercise.name
-        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
-
-        viewHolder.btnDeleteExercise.setOnClickListener {
-            removeExercise(viewHolder.adapterPosition)
-        }
-
-        viewHolder.btmEditExercise.setOnClickListener {
-            editFragmentPopup(position)
-        }
-    }
-
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.name
-        val btnDeleteExercise = itemView.btn_delete_workout
-        val btmEditExercise = itemView.btn_edit_workout
+    private fun removeByIndex(index: Int) {
+        exercises.removeAt(index)
+        exerciseKeys.removeAt(index)
+        notifyItemRemoved(index)
     }
 
     fun updateExercise(index: Int, newExercise: Exercise) {
@@ -84,6 +80,14 @@ class ExercisesAdapter(
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
+        updateExerciseCollection(exercisesCollection, index, newExercise)
+    }
+
+    private fun updateExerciseCollection(
+        exercisesCollection: CollectionReference,
+        index: Int,
+        newExercise: Exercise
+    ) {
         exercisesCollection.document(exerciseKeys[index]).update(
             "name", newExercise.name,
             "description", newExercise.description,
@@ -100,6 +104,41 @@ class ExercisesAdapter(
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.add_edit_exercise, null)
 
+        setUpView(view, position)
+
+        setUpAlertDialog(view, position)
+    }
+
+    private fun setUpAlertDialog(view: View, position: Int) {
+        AlertDialog.Builder(context)
+            .setView(view)
+            .setPositiveButton("Update") { dialog, which ->
+                val exercise = setExerciseValues(position, view)
+                updateExercise(position, exercise)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancel") { dialog, which ->
+                dialog.dismiss()
+            }
+            .show()
+    }
+
+    private fun setExerciseValues(position: Int, view: View): Exercise {
+        val exercise = exercises[position]
+        exercise.name = view.name_et.text.toString()
+        exercise.description = view.description_et.text.toString()
+        exercise.isMeasuredWithReps = (view.radioGroup.checkedRadioButtonId == R.id.rb_reps)
+        exercise.sets = view.sets_et.text.toString().toInt()
+
+        if (view.radioGroup.checkedRadioButtonId == R.id.rb_reps) {
+            exercise.value = view.reps_et.text!!.toString().toInt()
+        } else if (view.radioGroup.checkedRadioButtonId == R.id.rb_secs) {
+            exercise.value = view.secs_et.text!!.toString().toInt()
+        }
+        return exercise
+    }
+
+    private fun setUpView(view: View, position: Int) {
         view.tvAddEditPrompt.text = "Edit Exercise"
         view.name_et.setText(exercises[position].name)
         view.description_et.setText(exercises[position].description)
@@ -112,27 +151,5 @@ class ExercisesAdapter(
             view.secs_et.setText(exercises[position].value.toString())
         }
         view.sets_et.setText(exercises[position].sets.toString())
-
-        AlertDialog.Builder(context)
-            .setView(view)
-            .setPositiveButton("Update") { dialog, which ->
-                val exercise = exercises[position]
-                exercise.name = view.name_et.text.toString()
-                exercise.description = view.description_et.text.toString()
-                exercise.isMeasuredWithReps = (view.radioGroup.checkedRadioButtonId == R.id.rb_reps)
-                exercise.sets = view.sets_et.text.toString().toInt()
-
-                if (view.radioGroup.checkedRadioButtonId == R.id.rb_reps) {
-                    exercise.value = view.reps_et.text!!.toString().toInt()
-                } else if (view.radioGroup.checkedRadioButtonId == R.id.rb_secs) {
-                    exercise.value = view.secs_et.text!!.toString().toInt()
-                }
-                updateExercise(position, exercise)
-                dialog.dismiss()
-            }
-            .setNegativeButton("Cancel") { dialog, which ->
-                dialog.dismiss()
-            }
-            .show()
     }
 }

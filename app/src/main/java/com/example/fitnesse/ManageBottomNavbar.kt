@@ -5,7 +5,6 @@ import android.content.Intent
 import android.support.design.widget.BottomNavigationView
 
 object ManageBottomNavbar {
-
     fun setupNavbar(context: Context, navigation: BottomNavigationView) {
         val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
             when (item.itemId) {
@@ -37,6 +36,5 @@ object ManageBottomNavbar {
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-
     }
 }

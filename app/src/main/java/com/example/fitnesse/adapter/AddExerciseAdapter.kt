@@ -21,29 +21,27 @@ class AddExerciseAdapter(
     private var exercises = mutableListOf<Exercise>()
     private var exerciseKeys = mutableListOf<String>()
 
-    override fun onCreateViewHolder(viewGroup: ViewGroup,
-                                    viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(
+        viewGroup: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
         var itemRowView = LayoutInflater.from(context).inflate(
             R.layout.exercise_name_item, viewGroup, false
         )
         return ViewHolder(itemRowView)
     }
 
-    override fun getItemCount(): Int {
-        return exercises.size
-    }
-
+    override fun getItemCount(): Int { return exercises.size }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val exercise = exercises[position]
 
         viewHolder.btnExercise.text = exercise.name
-        viewHolder.btnExercise.setOnClickListener{
+        viewHolder.btnExercise.setOnClickListener {
             //TODO: ADD CLICKED EXERCISE
             dialog.dismiss()
         }
     }
-
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val btnExercise = itemView.btnExercise

@@ -13,19 +13,17 @@
             android:layout_height="wrap_content"
             android:text="@string/create_new_exercise"
             android:textSize="20dp"
-            android:id="@+id/tvAddEditPrompt"
-    />
+            android:id="@+id/tvAddEditPrompt"/>
 
     <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/name_text_input"
             android:hint="@string/name">
-
         <android.support.design.widget.TextInputEditText
                 android:id="@+id/name_et"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -33,11 +31,10 @@
             android:layout_height="wrap_content"
             android:id="@+id/description_text_input"
             android:hint="@string/description">
-
         <android.support.design.widget.TextInputEditText
                 android:id="@+id/description_et"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
     </android.support.design.widget.TextInputLayout>
 
 
@@ -46,7 +43,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="20dp">
-
         <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +50,6 @@
                 android:orientation="vertical"
                 android:id="@+id/radioGroup"
                 android:padding="20dp">
-
             <RadioButton
                     android:id="@+id/rb_reps"
                     android:layout_width="wrap_content"
@@ -66,9 +61,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/time_s"/>
-
         </RadioGroup>
-
         <LinearLayout
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
@@ -77,9 +70,7 @@
                     android:id="@+id/reps_et"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="number"
-            />
-
+                    android:inputType="number"/>
             <android.support.design.widget.TextInputEditText
                     android:id="@+id/secs_et"
                     android:layout_width="match_parent"
@@ -92,13 +83,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/sets_text_input"
-            android:hint="Set Count:">
-
+            android:hint="@string/set_count">
         <android.support.design.widget.TextInputEditText
                 android:id="@+id/sets_et"
                 android:inputType="number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"/>
     </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

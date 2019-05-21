@@ -28,8 +28,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:hint="@string/email"
-            android:id="@+id/tilEmail">
-    </com.rengwuxian.materialedittext.MaterialEditText>
+            android:id="@+id/tilEmail"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
@@ -39,8 +38,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:hint="@string/password"
-            android:id="@+id/tilPassword">
-    </com.rengwuxian.materialedittext.MaterialEditText>
+            android:id="@+id/tilPassword"/>
 
     <com.rengwuxian.materialedittext.MaterialEditText
             android:layout_width="match_parent"
@@ -50,8 +48,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginHorizontal="20dp"
             android:hint="@string/confirm_password"
-            android:id="@+id/tilConfirmPassword">
-    </com.rengwuxian.materialedittext.MaterialEditText>
+            android:id="@+id/tilConfirmPassword"/>
 
     <com.gc.materialdesign.views.ButtonRectangle
             android:layout_width="match_parent"
@@ -62,6 +59,5 @@
             android:layout_marginHorizontal="20dp"
             android:hint="@string/register"
             android:id="@+id/btnRegister"/>
-
 
 </android.support.constraint.ConstraintLayout>
