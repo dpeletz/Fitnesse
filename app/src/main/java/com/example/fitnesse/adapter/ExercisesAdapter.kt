@@ -1,5 +1,6 @@
 package com.example.fitnesse.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
@@ -8,13 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.TextView
 import com.example.fitnesse.R
 import com.example.fitnesse.data.Exercise
-import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.add_edit_exercise.view.*
 import kotlinx.android.synthetic.main.exercise_item.view.*
 
@@ -26,7 +25,7 @@ class ExercisesAdapter(
     private var exerciseKeys = mutableListOf<String>()
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        var itemRowView = LayoutInflater.from(context).inflate(
+        val itemRowView = LayoutInflater.from(context).inflate(
             R.layout.exercise_item, viewGroup, false
         )
         return ViewHolder(itemRowView)
@@ -36,6 +35,23 @@ class ExercisesAdapter(
         return exercises.size
     }
 
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
+        val exercise = exercises[position]
+
+        viewHolder.name.text = exercise.name
+        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
+
+        viewHolder.btnDeleteExercise.setOnClickListener { removeExercise(viewHolder.adapterPosition) }
+        viewHolder.btnEditExercise.setOnClickListener { editFragmentPopup(position) }
+        viewHolder.btnViewExercise.setOnClickListener { viewFragmentPopup(position) }
+    }
+
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val name: TextView = itemView.name
+        val btnDeleteExercise = itemView.btn_delete_workout!!
+        val btnEditExercise = itemView.btn_edit_workout!!
+        val btnViewExercise = itemView.btn_view_exercise!!
+    }
 
     fun addExercise(exercise: Exercise, key: String) {
         exercises.add(exercise)
@@ -43,10 +59,10 @@ class ExercisesAdapter(
         notifyDataSetChanged()
     }
 
-    fun removeExercise(index: Int) {
-        FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
-            .collection("exercises").document(exerciseKeys[index]).delete()
+    private fun removeExercise(index: Int) {
+        FirebaseFirestore.getInstance().collection(context.getString(R.string.users_string))
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection(context.getString(R.string.exercises_string)).document(exerciseKeys[index]).delete()
 
         exercises.removeAt(index)
         exerciseKeys.removeAt(index)
@@ -62,60 +78,32 @@ class ExercisesAdapter(
         }
     }
 
-
-    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        val exercise = exercises[position]
-
-        viewHolder.name.text = exercise.name
-        viewHolder.btnDeleteExercise.visibility = View.VISIBLE
-
-        viewHolder.btnDeleteExercise.setOnClickListener {
-            removeExercise(viewHolder.adapterPosition)
-        }
-
-        viewHolder.btnEditExercise.setOnClickListener {
-            editFragmentPopup(position)
-        }
-
-        viewHolder.btnViewExercise.setOnClickListener {
-            viewFragmentPopup(position)
-        }
-    }
-
-
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.name
-        val btnDeleteExercise = itemView.btn_delete_workout
-        val btnEditExercise = itemView.btn_edit_workout
-        val btnViewExercise = itemView.btn_view_exercise
-    }
-
-    fun updateExercise(index: Int, newExercise: Exercise) {
-        var exercisesCollection =
-            FirebaseFirestore.getInstance().collection("users")
+    private fun updateExercise(index: Int, newExercise: Exercise) {
+        val exercisesCollection =
+            FirebaseFirestore.getInstance().collection(context.getString(R.string.users_string))
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
-                .collection("exercises")
+                .collection(context.getString(R.string.exercises_string))
         exercisesCollection.document(exerciseKeys[index]).update(
-            "name", newExercise.name,
-            "description", newExercise.description,
-            "value", newExercise.value,
-            "isMeasuredWithReps", newExercise.isMeasuredWithReps,
-            "sets", newExercise.sets,
-            "recordList", newExercise.recordList
+            context.getString(R.string.name_string), newExercise.name,
+            context.getString(R.string.description_string), newExercise.description,
+            context.getString(R.string.value_string), newExercise.value,
+            context.getString(R.string.isMeasuredWithReps), newExercise.isMeasuredWithReps,
+            context.getString(R.string.sets_string), newExercise.sets,
+            context.getString(R.string.recordList), newExercise.recordList
         ).addOnSuccessListener {
-                exercises[index] = newExercise
-                notifyItemChanged(index)
-            }
-
+            exercises[index] = newExercise
+            notifyItemChanged(index)
+        }
 
 
     }
 
+    @SuppressLint("InflateParams")
     private fun editFragmentPopup(position: Int) {
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.add_edit_exercise, null)
 
-        view.tvAddEditPrompt.text = "Edit Exercise"
+        view.tvAddEditPrompt.text = context.getString(R.string.edit_exercise_string)
         view.name_et.setText(exercises[position].name)
         view.description_et.setText(exercises[position].description)
         // TODO: why does it go back to reps when activity is resumed
@@ -130,7 +118,7 @@ class ExercisesAdapter(
 
         AlertDialog.Builder(context)
             .setView(view)
-            .setPositiveButton("Update") { dialog, which ->
+            .setPositiveButton(context.getString(R.string.update_string)) { dialog, which ->
                 val exercise = exercises[position]
                 exercise.name = view.name_et.text.toString()
                 exercise.description = view.description_et.text.toString()
@@ -154,7 +142,7 @@ class ExercisesAdapter(
                 updateExercise(position, exercise)
                 dialog.dismiss()
             }
-            .setNegativeButton("Cancel") { dialog, which ->
+            .setNegativeButton(context.getString(R.string.cancel_string)) { dialog, which ->
                 dialog.dismiss()
             }
             .show()
@@ -164,7 +152,7 @@ class ExercisesAdapter(
         val view = (context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater)
             .inflate(R.layout.add_edit_exercise, null)
 
-        view.tvAddEditPrompt.text = "Exercise Details"
+        view.tvAddEditPrompt.text = context.getString(R.string.exercise_details_string)
         view.name_et.setText(exercises[position].name)
         view.description_et.setText(exercises[position].description)
         if (exercises[position].isMeasuredWithReps) {
@@ -176,20 +164,22 @@ class ExercisesAdapter(
         }
         view.sets_et.setText(exercises[position].sets.toString())
 
-        switchEditMode(listOf(
-            view.name_et,
-            view.description_et,
-            view.sets_et,
-            view.reps_et,
-            view.secs_et
-        ), listOf(
-            view.rb_secs,
-            view.rb_reps
-        ))
+        switchEditMode(
+            listOf(
+                view.name_et,
+                view.description_et,
+                view.sets_et,
+                view.reps_et,
+                view.secs_et
+            ), listOf(
+                view.rb_secs,
+                view.rb_reps
+            )
+        )
 
         AlertDialog.Builder(context)
             .setView(view)
-            .setPositiveButton("Done") { dialog, which ->
+            .setPositiveButton(context.getString(R.string.done_string)) { dialog, which ->
                 dialog.dismiss()
             }
             .show()

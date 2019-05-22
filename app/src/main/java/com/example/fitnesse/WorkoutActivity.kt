@@ -1,99 +1,78 @@
 package com.example.fitnesse
 
-import android.support.v7.app.AppCompatActivity
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.fitnesse.adapter.AddExerciseAdapter
-import com.example.fitnesse.adapter.ExercisesAdapter
 import com.example.fitnesse.adapter.WorkoutAdapter
 import com.example.fitnesse.data.Exercise
-import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import kotlinx.android.synthetic.main.activity_workout.*
-import kotlinx.android.synthetic.main.activity_workout.btn_add_exercise
-import kotlinx.android.synthetic.main.activity_workout.navigation
-import kotlinx.android.synthetic.main.activity_workout.recyclerList
 import kotlinx.android.synthetic.main.add_exercise_in_workout.view.*
 
 class WorkoutActivity : AppCompatActivity() {
-
     lateinit var workoutAdapter: WorkoutAdapter
-    lateinit var workoutID : String
+    private lateinit var workoutID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_workout)
-        tvTitle.text = intent.getStringExtra("workoutName")
+        tvTitle.text = intent.getStringExtra(getString(R.string.workout_name_intent))
         ManageBottomNavbar.setupNavbar(this@WorkoutActivity, navigation)
 
-        workoutID = intent.getStringExtra("workoutID")
+        workoutID = intent.getStringExtra(getString(R.string.workout_id_intent))
 
         populateExercises()
-
-        btn_add_exercise.setOnClickListener{
-            addFragmentPopup()
-        }
+        btn_add_exercise.setOnClickListener { addFragmentPopup() }
     }
 
     private fun populateExercises() {
         Thread {
-            /*
-            TODO: incorporate Firebase here
-             */
-
             runOnUiThread {
                 workoutAdapter = WorkoutAdapter(this, workoutID)
-
                 recyclerList.layoutManager = LinearLayoutManager(this)
                 recyclerList.adapter = workoutAdapter
-
                 setupExercisesListener()
             }
-
         }.start()
     }
 
+    @SuppressLint("InflateParams")
     private fun addFragmentPopup() {
         val view = layoutInflater.inflate(R.layout.add_exercise_in_workout, null)
-
-
         val dialog = AlertDialog.Builder(this)
             .setView(view)
-            .setNegativeButton("Cancel") { dialog, which ->
+            .setNegativeButton(getString(R.string.cancel_string)) { dialog, which ->
                 dialog.dismiss()
             }.show()
-
-        var exercisesAdapter = AddExerciseAdapter(this,
+        val exercisesAdapter = AddExerciseAdapter(
+            this,
             dialog,
             workoutID,
-            workoutAdapter)
-
+            workoutAdapter
+        )
         populateExerciseItems(exercisesAdapter, view)
     }
 
     private fun populateExerciseItems(exercisesAdapter: AddExerciseAdapter, view: View) {
         Thread {
-
             initExercises(exercisesAdapter)
-
             runOnUiThread {
                 view.recyclerList.layoutManager = LinearLayoutManager(this)
                 view.recyclerList.adapter = exercisesAdapter
             }
-
         }.start()
     }
 
     private fun initExercises(exercisesAdapter: AddExerciseAdapter) {
-
-        val query = FirebaseFirestore.getInstance().collection("users")
+        val query = FirebaseFirestore.getInstance().collection(getString(R.string.users_string))
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .collection("exercises")
+            .collection(getString(R.string.exercises_string))
 
         query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
@@ -103,8 +82,8 @@ class WorkoutActivity : AppCompatActivity() {
                         return
                     }
 
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
+                    for (dc in querySnapshot!!.documentChanges) {
+                        when (dc.type) {
                             DocumentChange.Type.ADDED -> {
                                 val exercise = dc.document.toObject(Exercise::class.java)
 
@@ -122,12 +101,11 @@ class WorkoutActivity : AppCompatActivity() {
     }
 
     private fun setupExercisesListener() {
-
-        val query = FirebaseFirestore.getInstance().collection("users")
+        val query = FirebaseFirestore.getInstance().collection(getString(R.string.users_string))
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .collection("workouts")
+            .collection(getString(R.string.workouts_string))
             .document(workoutID)
-            .collection("exercises")
+            .collection(getString(R.string.exercises_string))
 
         query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
@@ -137,8 +115,8 @@ class WorkoutActivity : AppCompatActivity() {
                         return
                     }
 
-                    for (dc in querySnapshot!!.getDocumentChanges()) {
-                        when (dc.getType()) {
+                    for (dc in querySnapshot!!.documentChanges) {
+                        when (dc.type) {
                             DocumentChange.Type.ADDED -> {
                                 val exercise = dc.document.toObject(Exercise::class.java)
 

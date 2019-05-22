@@ -3,7 +3,6 @@ package com.example.fitnesse.adapter
 import android.annotation.TargetApi
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,20 +13,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.exercise_preview.view.*
 
 @TargetApi(24)
-class WorkoutAdapter : RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
+class WorkoutAdapter// must call super in constructor as well
+    (private val context: Context, private var workoutID: String) : RecyclerView.Adapter<WorkoutAdapter.ViewHolder>() {
 
-    private val context: Context
     private var exercises = mutableListOf<Exercise>()
-    private var workoutID: String
-
-    // must call super in constructor as well
-    constructor(context: Context, workoutID: String) : super() {
-        this.context = context
-        this.workoutID = workoutID
-    }
 
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
-        var itemRowView = LayoutInflater.from(context).inflate(
+        val itemRowView = LayoutInflater.from(context).inflate(
             R.layout.exercise_preview, viewGroup, false
         )
         return ViewHolder(itemRowView)
@@ -37,28 +29,26 @@ class WorkoutAdapter : RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
         return exercises.size
     }
 
-    override fun onBindViewHolder(viewHolder: WorkoutAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
         val exercise = exercises[position]
         viewHolder.name.text = exercise.name
-        viewHolder.btnDelete.setOnClickListener{
-            deleteExerciseFromDB(position)
-        }
+        viewHolder.btnDelete.setOnClickListener { deleteExerciseFromDB(position) }
     }
 
 
     private fun deleteExerciseFromDB(index: Int) {
-        FirebaseFirestore.getInstance().collection("users")
+        FirebaseFirestore.getInstance().collection(context.getString(R.string.users_string))
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .collection("workouts")
+            .collection(context.getString(R.string.workouts_string))
             .document(workoutID)
-            .collection("exercises")
+            .collection(context.getString(R.string.exercises_string))
             .document(exercises[index].exerciseID).delete()
     }
 
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val name = itemView.name
-        val btnDelete = itemView.btn_delete_workout
+        val name = itemView.name!!
+        val btnDelete = itemView.btn_delete_workout!!
     }
 
     fun addExercise(exercise: Exercise, key: String) {
@@ -68,12 +58,9 @@ class WorkoutAdapter : RecyclerView.Adapter<WorkoutAdapter.ViewHolder> {
     }
 
     fun removeExerciseByKey(key: String) {
-        var index = exercises.indexOfFirst {
-            it.exerciseID == key
-        }
-        exercises.removeIf {
-            it.exerciseID == key
-        }
+        val index = exercises.indexOfFirst { it.exerciseID == key }
+        exercises.removeIf { it.exerciseID == key }
+
         if (index != -1) {
             notifyItemRemoved(index)
         }

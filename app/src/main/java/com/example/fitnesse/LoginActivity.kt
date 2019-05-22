@@ -2,12 +2,11 @@ package com.example.fitnesse
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity;
-import com.google.firebase.auth.FirebaseAuth
-import kotlinx.android.synthetic.main.activity_login.*
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
-import com.example.fitnesse.data.User
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.android.synthetic.main.activity_login.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -15,19 +14,11 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        btnRegister.setOnClickListener {
-            registerClick()
-        }
-
-        /*
-        TODO: update this with database login and such !!
-         */
-        btnSignIn.setOnClickListener {
-            loginClick()
-        }
+        btnRegister.setOnClickListener { registerClick() }
+        btnSignIn.setOnClickListener { loginClick() }
     }
 
-    fun registerClick() {
+    private fun registerClick() {
         if (!isFormValid()) {
             return
         }
@@ -50,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    fun loginClick() {
+    private fun loginClick() {
         if (!isFormValid()) {
             return
         }
@@ -73,16 +64,16 @@ class LoginActivity : AppCompatActivity() {
     private fun isFormValid(): Boolean {
         return when {
             tilEmail.text!!.isEmpty() -> {
-                tilEmail.error = "This field can not be empty"
+                tilEmail.error = getString(R.string.empty_email_string)
                 false
             }
             tilPassword.text!!.isEmpty() -> {
-                tilPassword.error = "This field can not be empty"
+                tilPassword.error = getString(R.string.empty_password_string)
                 false
             }
             else -> true
         }
     }
 
-    private fun userNameFromEmail(email: String) = email.substringBefore("@")
+    private fun userNameFromEmail(email: String) = email.substringBefore(getString(R.string.at_symbol_string))
 }

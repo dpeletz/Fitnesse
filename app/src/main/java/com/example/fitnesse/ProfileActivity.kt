@@ -1,21 +1,22 @@
 package com.example.fitnesse
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TextInputEditText
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import com.example.fitnesse.data.User
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.*
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
 
     private val genderArray = arrayOf("M", "F")
-    var editMode = true
-    lateinit var editTexts: List<TextInputEditText>
-    lateinit var user: User
+    private var editMode = true
+    private lateinit var editTexts: List<TextInputEditText>
+    private lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +27,7 @@ class ProfileActivity : AppCompatActivity() {
             email = FirebaseAuth.getInstance().currentUser!!.email.toString(),
             userID = FirebaseAuth.getInstance().currentUser!!.uid
         )
-
         loadUser()
-
         editTexts = listOf<TextInputEditText>(
             etName,
             etGender,
@@ -36,21 +35,16 @@ class ProfileActivity : AppCompatActivity() {
             etHeight,
             etWeight
         )
-
         switchEditMode()
-
         btnEdit.setOnClickListener {
-            if (btnEdit.text == "save") {
+            if (btnEdit.text == getString(R.string.save_string)) {
                 sendValuesToFirebase()
             }
             switchEditMode()
         }
-
     }
 
     private fun sendValuesToFirebase() {
-        //TODO: SHOULD WE ALLOW EMPTY VALUES???
-
         user.weight = etWeight.text.toString().toFloat()
         user.height = etHeight.text.toString().toFloat()
         user.gender = genderArray.indexOf(etGender.text.toString().toUpperCase())
@@ -58,19 +52,17 @@ class ProfileActivity : AppCompatActivity() {
         user.name = etName.text.toString()
 
         if (etWeight.text.toString().toFloat() != 0F) {
-            Log.d("height", user.height.toString())
-            etBMI.text = (user.weight / (user.height * user.height)).toString() +
-                    " kg / m^2"
+            Log.d(getString(R.string.height_string), user.height.toString())
+            etBMI.text = (user.weight / (user.height * user.height)).toString()
         }
 
         addOrUpdateUser()
     }
 
     private fun addOrUpdateUser() {
-
-        var usersCollection = FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
-            .collection("user")
+        val usersCollection = FirebaseFirestore.getInstance().collection(getString(R.string.users_string))
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection(getString(R.string.user_string))
 
         usersCollection.get().addOnSuccessListener { documentSnapshot ->
             val user = documentSnapshot.toObjects(User::class.java)
@@ -79,11 +71,11 @@ class ProfileActivity : AppCompatActivity() {
                 usersCollection.document(documentSnapshot.documents.first().id)
                     .update(
                         (mapOf(
-                            "weight" to etWeight.text.toString().toFloat(),
-                            "height" to etHeight.text.toString().toFloat(),
-                            "gender" to genderArray.indexOf(etGender.text.toString().toUpperCase()),
-                            "age" to etAge.text.toString().toInt(),
-                            "name" to etName.text.toString()
+                            getString(R.string.weight_string) to etWeight.text.toString().toFloat(),
+                            getString(R.string.height_string) to etHeight.text.toString().toFloat(),
+                            getString(R.string.gender_string) to genderArray.indexOf(etGender.text.toString().toUpperCase()),
+                            getString(R.string.age_string) to etAge.text.toString().toInt(),
+                            getString(R.string.name_string) to etName.text.toString()
                         ))
                     )
 
@@ -95,22 +87,21 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun loadUser() {
-        var usersCollection = FirebaseFirestore.getInstance().collection("users")
-            .document(FirebaseAuth.getInstance().currentUser!!.uid.toString())
-            .collection("user")
+        val usersCollection = FirebaseFirestore.getInstance().collection(getString(R.string.users_string))
+            .document(FirebaseAuth.getInstance().currentUser!!.uid)
+            .collection(getString(R.string.user_string))
 
         usersCollection.get().addOnSuccessListener { documentSnapshot ->
             val user = documentSnapshot.toObjects(User::class.java)
             if (user.size > 0) {
-                etName.setText(user.get(0).name)
-                etWeight.setText(user.get(0).weight.toString())
-                etHeight.setText(user.get(0).height.toString())
-                etGender.setText(genderArray[user.get(0).gender])
-                etAge.setText(user.get(0).age.toString())
+                etName.setText(user[0].name)
+                etWeight.setText(user[0].weight.toString())
+                etHeight.setText(user[0].height.toString())
+                etGender.setText(genderArray[user[0].gender])
+                etAge.setText(user[0].age.toString())
 
-                if (user.get(0).weight != 0F) {
-                    etBMI.text = (user.get(0).weight / (user.get(0).height * user.get(0).height)).toString() +
-                            " kg / m^2"
+                if (user[0].weight != 0F) {
+                    etBMI.text = (user[0].weight / (user[0].height * user[0].height)).toString()
                 }
 
             }
@@ -134,6 +125,6 @@ class ProfileActivity : AppCompatActivity() {
             editText.isEnabled = editMode
             editText.setTextIsSelectable(editMode)
         }
-        btnEdit.text = if (!editMode) "edit" else "save"
+        btnEdit.text = if (!editMode) getString(R.string.edit_string) else getString(R.string.save_string)
     }
 }

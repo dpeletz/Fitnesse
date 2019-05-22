@@ -9,7 +9,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class StopwatchActivity : AppCompatActivity() {
-    private var lastElapsedTime = "0:0.0"
+    private var lastElapsedTime = getString(R.string.zero_string)
     private var enabled = false
     private lateinit var mainTimer: Timer
 
@@ -29,14 +29,14 @@ class StopwatchActivity : AppCompatActivity() {
         }
         btnStop.setOnClickListener {
             enabled = false
-            lastElapsedTime = "0:0.0"
+            lastElapsedTime = getString(R.string.zero_string)
             mainTimer.cancel()
         }
         btnReset.setOnClickListener {
             enabled = false
-            lastElapsedTime = "0:0.0"
+            lastElapsedTime = getString(R.string.zero_string)
             mainTimer.cancel()
-            tvStopwatch.text = "0:0.0"
+            tvStopwatch.text = getString(R.string.zero_string)
         }
     }
 
@@ -69,7 +69,7 @@ class StopwatchActivity : AppCompatActivity() {
         val myTimeView = layoutInflater.inflate(R.layout.time_row, null, false)
 
         val stopwatchText = tvStopwatch.text
-        if (lastElapsedTime == "0:0.0") {
+        if (lastElapsedTime == getString(R.string.zero_string)) {
             myTimeView.tvTime.text = stopwatchText
             lastElapsedTime = now.toString()
         } else {

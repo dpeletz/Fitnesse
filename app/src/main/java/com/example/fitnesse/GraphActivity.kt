@@ -8,14 +8,15 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.example.fitnesse.data.Exercise
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_graph.*
-import kotlin.math.min
 
 class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    var spinner: Spinner? = null
+    private var spinner: Spinner? = null
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
         val entries = ArrayList<Entry>()
@@ -23,24 +24,30 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        var selectedExerciseName = parent!!.getItemAtPosition(position)
+        val selectedExerciseName = parent!!.getItemAtPosition(position)
 
-        var exercisesCollection =
-            FirebaseFirestore.getInstance().collection("users")
+        val exercisesCollection =
+            FirebaseFirestore.getInstance().collection(getString(R.string.users_string))
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
-                .collection("exercises")
+                .collection(getString(R.string.exercises_string))
 
         exercisesCollection
-            .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
+            .whereEqualTo(getString(R.string.name_string), selectedExerciseName).get()
+            .addOnSuccessListener { documentSnapshot ->
                 val exercise = documentSnapshot.toObjects(Exercise::class.java)
 
-                var recordList = exercise.first().recordList
+                val recordList = exercise.first().recordList
 
                 val entries = ArrayList<Entry>()
 
-                recordList.forEach { r -> entries.add(Entry(
-                    recordList.indexOf(r).toFloat() + 1,
-                    r.toFloat())) }
+                recordList.forEach { r ->
+                    entries.add(
+                        Entry(
+                            recordList.indexOf(r).toFloat() + 1,
+                            r.toFloat()
+                        )
+                    )
+                }
 
                 setLineChart(entries)
 
@@ -56,26 +63,26 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setLineChart(entries)
 
         spinner = this.spinnerGraphType
-        spinner!!.setOnItemSelectedListener(this)
+        spinner!!.onItemSelectedListener = this
 
-        val exercisesCollection = FirebaseFirestore.getInstance().collection("users")
+        val exercisesCollection = FirebaseFirestore.getInstance().collection(getString(R.string.users_string))
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
-            .collection("exercises")
+            .collection(getString(R.string.exercises_string))
 
         exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
             val exerciseList = documentSnapshot.toObjects(Exercise::class.java)
 
             val exerciseNameList = ArrayList<String>(exerciseList.size)
-            exerciseList.forEach { it -> exerciseNameList.add(it.name) }
+            exerciseList.forEach { exerciseNameList.add(it.name) }
 
             val arrAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
             arrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner!!.setAdapter(arrAdapter)
+            spinner!!.adapter = arrAdapter
         }
     }
 
     private fun setLineChart(entries: ArrayList<Entry>) {
-        val lineDataSet = LineDataSet(entries, "Reps/Seconds")
+        val lineDataSet = LineDataSet(entries, getString(R.string.reps_seconds_string))
 
         val maxY = entries.maxBy {
             it.y
@@ -86,7 +93,7 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         lineChart.data = data // set the data and list of labels into chart
 
         // TODO: set chart description
-        lineChart.description.text = "Your Progress!"
+        lineChart.description.text = getString(R.string.progress_string)
         lineChart.description.textSize = 15F
 
         lineDataSet.color = resources.getColor(R.color.colorPrimary)
@@ -94,8 +101,8 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
         lineChart.animateY(1000)
 
-        val leftAxis = lineChart.getAxisLeft()
-        val rightAxis = lineChart.getAxisRight()
+        val leftAxis = lineChart.axisLeft
+        val rightAxis = lineChart.axisRight
         leftAxis.axisMinimum = 0F
         leftAxis.axisMaximum = (maxY ?: 10F) * 1.5F
         rightAxis.axisMinimum = 0F
