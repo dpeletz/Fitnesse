@@ -1,9 +1,8 @@
 package com.example.fitnesse
 
-import android.annotation.SuppressLint
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.example.fitnesse.adapter.WorkoutsAdapter
@@ -13,10 +12,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import kotlinx.android.synthetic.main.activity_workouts.*
+import kotlinx.android.synthetic.main.activity_workouts.recyclerList
+import kotlinx.android.synthetic.main.add_edit_workout.*
 import kotlinx.android.synthetic.main.add_edit_workout.view.*
 import java.util.*
 
 class WorkoutsActivity : AppCompatActivity() {
+
     lateinit var workoutsAdapter: WorkoutsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,27 +26,49 @@ class WorkoutsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_workouts)
 
         ManageBottomNavbar.setupNavbar(this@WorkoutsActivity, navigation)
+
         populateWorkoutItems()
+
         workoutsAdapter = WorkoutsAdapter(
-            this
+            this,
+            FirebaseAuth.getInstance().currentUser!!.uid
         )
-        btn_add_workout.setOnClickListener { addFragmentPopup() }
+
+        btn_add_workout.setOnClickListener {
+            addFragmentPopup()
+        }
+
     }
 
     private fun populateWorkoutItems() {
         Thread {
+
             initWorkouts()
+            /*
+            TODO: incorporate Firebase here
+             */
+
             val date = Date(2019, 3, 4)
             val stackHistory = Stack<Date>()
             stackHistory.push(date)
+
             runOnUiThread {
+                //                workoutsAdapter = WorkoutsAdapter(this, listItems)
+
                 recyclerList.layoutManager = LinearLayoutManager(this)
                 recyclerList.adapter = workoutsAdapter
             }
+
         }.start()
     }
 
+    private fun getWorkoutUUID(): String {
+        var stringUUID = UUID.randomUUID().toString()
+        return stringUUID
+    }
+
     private fun addWorkout(name: String, description: String) {
+
         val exerciseList = listOf(Exercise())
         val historyStack = Stack<Date>()
         historyStack.push(Date(2019, 5, 5))
@@ -52,7 +76,7 @@ class WorkoutsActivity : AppCompatActivity() {
         //TODO: link this up to correct information from an add workout dialog or activity
         val workout = Workout(
             FirebaseAuth.getInstance().currentUser!!.uid,
-            UUID.randomUUID().toString(),
+            getWorkoutUUID(),
             name,
             exerciseList,
             arrayListOf(Date(2019, 5, 5)),
@@ -61,30 +85,33 @@ class WorkoutsActivity : AppCompatActivity() {
             1,
             description
         )
-        val workoutsCollection =
+
+        var workoutsCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("workouts")
+
         workoutsCollection.add(
             workout
         ).addOnSuccessListener {
-            Toast.makeText(
-                this@WorkoutsActivity,
-                "Workout saved", Toast.LENGTH_LONG
-            ).show()
+            workout.workoutID = it.id
         }.addOnFailureListener {
             Toast.makeText(
                 this@WorkoutsActivity,
                 "Error: ${it.message}", Toast.LENGTH_LONG
             ).show()
         }
+
     }
 
     private fun initWorkouts() {
         val db = FirebaseFirestore.getInstance()
+
         val query = db.collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("workouts")
+
+
         var allWorkoutsListener = query.addSnapshotListener(
             object : EventListener<QuerySnapshot> {
                 override fun onEvent(querySnapshot: QuerySnapshot?, e: FirebaseFirestoreException?) {
@@ -92,15 +119,15 @@ class WorkoutsActivity : AppCompatActivity() {
                         Toast.makeText(this@WorkoutsActivity, "listen error: ${e.message}", Toast.LENGTH_LONG).show()
                         return
                     }
-                    for (dc in querySnapshot!!.documentChanges) {
-                        when (dc.type) {
+
+                    for (dc in querySnapshot!!.getDocumentChanges()) {
+                        when (dc.getType()) {
                             DocumentChange.Type.ADDED -> {
                                 val workout = dc.document.toObject(Workout::class.java)
+
                                 workoutsAdapter.addWorkout(workout, dc.document.id)
                             }
                             DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@WorkoutsActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG)
-                                    .show()
                             }
                             DocumentChange.Type.REMOVED -> {
                                 workoutsAdapter.removeWorkoutByKey(dc.document.id)
@@ -111,9 +138,9 @@ class WorkoutsActivity : AppCompatActivity() {
             })
     }
 
-    @SuppressLint("InflateParams")
     private fun addFragmentPopup() {
         val view = layoutInflater.inflate(R.layout.add_edit_workout, null)
+
         AlertDialog.Builder(this)
             .setView(view)
             .setPositiveButton("Done") { dialog, which ->
@@ -128,4 +155,6 @@ class WorkoutsActivity : AppCompatActivity() {
             }
             .show()
     }
+
+
 }

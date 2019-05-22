@@ -8,31 +8,43 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.example.fitnesse.data.Exercise
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.data.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_graph.*
+import kotlin.math.min
 
 class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
-    private var spinner: Spinner? = null
+    var spinner: Spinner? = null
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
-        // TODO: allow graph to just be first exercise in list (if one exists)
-        println("NOTHING SELECTED YET")
-        println("----------")
+        val entries = ArrayList<Entry>()
+        setLineChart(entries)
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        // TODO: switch graph to the selected exercise
-        val selectedExerciseName = parent!!.getItemAtPosition(position)
-        val exercisesCollection =
+        var selectedExerciseName = parent!!.getItemAtPosition(position)
+
+        var exercisesCollection =
             FirebaseFirestore.getInstance().collection("users")
                 .document(FirebaseAuth.getInstance().currentUser!!.uid)
                 .collection("exercises")
-        queryExercisesCollection(exercisesCollection, selectedExerciseName)
+
+        exercisesCollection
+            .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
+                val exercise = documentSnapshot.toObjects(Exercise::class.java)
+
+                var recordList = exercise.first().recordList
+
+                val entries = ArrayList<Entry>()
+
+                recordList.forEach { r -> entries.add(Entry(
+                    recordList.indexOf(r).toFloat() + 1,
+                    r.toFloat())) }
+
+                setLineChart(entries)
+
+            }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,27 +52,12 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         setContentView(R.layout.activity_graph)
         ManageBottomNavbar.setupNavbar(this@GraphActivity, navigation)
 
-        setUpGenericChart()
+        val entries = ArrayList<Entry>()
+        setLineChart(entries)
+
         spinner = this.spinnerGraphType
-        spinner!!.onItemSelectedListener = this
-        setUpExerciseSpinner()
-    }
+        spinner!!.setOnItemSelectedListener(this)
 
-    private fun queryExercisesCollection(
-        exercisesCollection: CollectionReference,
-        selectedExerciseName: Any?
-    ) {
-        exercisesCollection
-            .whereEqualTo("name", selectedExerciseName).get().addOnSuccessListener { documentSnapshot ->
-                val exercise = documentSnapshot.toObjects(Exercise::class.java)
-                val recordList = exercise.first().recordList
-                val entries = ArrayList<Entry>()
-                recordList.forEach { r -> entries.add(Entry(recordList.indexOf(r).toFloat(), r.toFloat())) }
-                setLineChart(entries, exercise.first().name)
-            }
-    }
-
-    private fun setUpExerciseSpinner() {
         val exercisesCollection = FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises")
@@ -68,61 +65,47 @@ class GraphActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         exercisesCollection.get().addOnSuccessListener { documentSnapshot ->
             val exerciseList = documentSnapshot.toObjects(Exercise::class.java)
 
-            // TODO: potentially add in check to verify that at least 1 exercise is in list
             val exerciseNameList = ArrayList<String>(exerciseList.size)
-            exerciseList.forEach { exerciseNameList.add(it.name) }
-            val aa = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner!!.adapter = aa
+            exerciseList.forEach { it -> exerciseNameList.add(it.name) }
+
+            val arrAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, exerciseNameList)
+            arrAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner!!.setAdapter(arrAdapter)
         }
     }
 
-    private fun setUpGenericChart() {
-        val entries = ArrayList<Entry>()
+    private fun setLineChart(entries: ArrayList<Entry>) {
+        val lineDataSet = LineDataSet(entries, "Reps/Seconds")
 
-        entries.add(Entry(1f, 135F))
-        entries.add(Entry(2f, 155F))
-        entries.add(Entry(3f, 160F))
-        entries.add(Entry(4f, 175F))
-        entries.add(Entry(5f, 180F))
-        entries.add(Entry(6f, 180F))
-        entries.add(Entry(7f, 195F))
-        entries.add(Entry(8f, 225F))
-        entries.add(Entry(9f, 235F))
-        setLineChart(entries, "initial")
-    }
+        val maxY = entries.maxBy {
+            it.y
+        }?.y
 
-    private fun setLineChart(entries: ArrayList<Entry>, name: String) {
-        val lineDataSet = LineDataSet(entries, "Cells")
         val data = LineData(lineDataSet)
-        setUpLineChart(data, name, lineDataSet)
-        setGraphAxes()
-    }
 
-    private fun setUpLineChart(
-        data: LineData,
-        name: String,
-        lineDataSet: LineDataSet
-    ) {
         lineChart.data = data // set the data and list of labels into chart
-        // TODO: set chart description
-        lineChart.description.text = "Line Chart of $name"
-        lineDataSet.color = resources.getColor(R.color.colorPrimary)
-        lineChart.animateY(5000)
-    }
 
-    private fun setGraphAxes() {
-        val leftAxis = lineChart.axisLeft
-        val rightAxis = lineChart.axisRight
+        // TODO: set chart description
+        lineChart.description.text = "Your Progress!"
+        lineChart.description.textSize = 15F
+
+        lineDataSet.color = resources.getColor(R.color.colorPrimary)
+        lineDataSet.valueTextSize = 12F
+
+        lineChart.animateY(1000)
+
+        val leftAxis = lineChart.getAxisLeft()
+        val rightAxis = lineChart.getAxisRight()
         leftAxis.axisMinimum = 0F
-        leftAxis.axisMaximum = 250F
+        leftAxis.axisMaximum = (maxY ?: 10F) * 1.5F
         rightAxis.axisMinimum = 0F
-        rightAxis.axisMaximum = 250F
+        rightAxis.axisMaximum = (maxY ?: 10F) * 1.5F
         rightAxis.isEnabled = false
 
         val xAxis = lineChart.xAxis
         xAxis.axisMinimum = 0F
-        xAxis.axisMaximum = 10F
+        xAxis.axisMaximum = maxOf(entries.size.toFloat() + 1F, 6F)
         xAxis.position = XAxis.XAxisPosition.BOTTOM
+
     }
 }
