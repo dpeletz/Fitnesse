@@ -94,10 +94,6 @@ class WorkoutsActivity : AppCompatActivity() {
         workoutsCollection.add(
             workout
         ).addOnSuccessListener {
-            Toast.makeText(
-                this@WorkoutsActivity,
-                "Workout saved", Toast.LENGTH_LONG
-            ).show()
             workout.workoutID = it.id
         }.addOnFailureListener {
             Toast.makeText(
@@ -132,8 +128,6 @@ class WorkoutsActivity : AppCompatActivity() {
                                 workoutsAdapter.addWorkout(workout, dc.document.id)
                             }
                             DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@WorkoutsActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG)
-                                    .show()
                             }
                             DocumentChange.Type.REMOVED -> {
                                 workoutsAdapter.removeWorkoutByKey(dc.document.id)

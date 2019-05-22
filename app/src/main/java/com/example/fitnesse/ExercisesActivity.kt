@@ -72,7 +72,6 @@ class ExercisesActivity : AppCompatActivity() {
                 val exercise = documentSnapshot.toObjects(Exercise::class.java)
 
                 if (exercise.size > 0) {
-                    println("EXERCISE ALREADY IN DB")
                     // TODO: change functionality when exercise already exists in DB
                 }
 //                exercisesCollection.document(documentSnapshot.documents.first().id)
@@ -90,10 +89,6 @@ class ExercisesActivity : AppCompatActivity() {
             exercise
         ).addOnSuccessListener {
             exercise.exerciseID = it.id
-            Toast.makeText(
-                this@ExercisesActivity,
-                "Exercise saved", Toast.LENGTH_LONG
-            ).show()
         }.addOnFailureListener {
             Toast.makeText(
                 this@ExercisesActivity,
@@ -125,8 +120,6 @@ class ExercisesActivity : AppCompatActivity() {
                                 exercisesAdapter.addExercise(exercise, dc.document.id)
                             }
                             DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@ExercisesActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG)
-                                    .show()
                             }
                             DocumentChange.Type.REMOVED -> {
                                 exercisesAdapter.removeExerciseByKey(dc.document.id)

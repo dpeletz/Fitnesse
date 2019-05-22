@@ -91,8 +91,6 @@ class WorkoutActivity : AppCompatActivity() {
 
     private fun initExercises(exercisesAdapter: AddExerciseAdapter) {
 
-        Log.d("ughhh", workoutID)
-
         val query = FirebaseFirestore.getInstance().collection("users")
             .document(FirebaseAuth.getInstance().currentUser!!.uid)
             .collection("exercises")
@@ -113,8 +111,6 @@ class WorkoutActivity : AppCompatActivity() {
                                 exercisesAdapter.addExercise(exercise, dc.document.id)
                             }
                             DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@WorkoutActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG)
-                                    .show()
                             }
                             DocumentChange.Type.REMOVED -> {
                                 exercisesAdapter.removeExerciseByKey(dc.document.id)
@@ -149,8 +145,6 @@ class WorkoutActivity : AppCompatActivity() {
                                 workoutAdapter.addExercise(exercise, dc.document.id)
                             }
                             DocumentChange.Type.MODIFIED -> {
-                                Toast.makeText(this@WorkoutActivity, "update: ${dc.document.id}", Toast.LENGTH_LONG)
-                                    .show()
                             }
                             DocumentChange.Type.REMOVED -> {
                                 workoutAdapter.removeExerciseByKey(dc.document.id)

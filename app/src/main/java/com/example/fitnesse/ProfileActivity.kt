@@ -120,12 +120,7 @@ class ProfileActivity : AppCompatActivity() {
     private fun addUserToCollection(usersCollection: CollectionReference) {
         usersCollection.add(
             user
-        ).addOnSuccessListener {
-            Toast.makeText(
-                this@ProfileActivity,
-                "User saved", Toast.LENGTH_LONG
-            ).show()
-        }.addOnFailureListener {
+        ).addOnFailureListener {
             Toast.makeText(
                 this@ProfileActivity,
                 "Error: ${it.message}", Toast.LENGTH_LONG

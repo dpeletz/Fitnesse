@@ -42,10 +42,6 @@ class LoginActivity : AppCompatActivity() {
                     .build()
             )
 
-            Toast.makeText(
-                this@LoginActivity,
-                "REGISTER OK", Toast.LENGTH_LONG
-            ).show()
         }.addOnFailureListener {
             Toast.makeText(
                 this@LoginActivity,
@@ -62,12 +58,6 @@ class LoginActivity : AppCompatActivity() {
         FirebaseAuth.getInstance().signInWithEmailAndPassword(
             tilEmail.text.toString(), tilPassword.text.toString()
         ).addOnSuccessListener {
-
-
-            Toast.makeText(
-                this@LoginActivity,
-                "Login OK", Toast.LENGTH_LONG
-            ).show()
 
             startActivity(
                 Intent(this@LoginActivity, MainActivity::class.java)
