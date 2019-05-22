@@ -9,7 +9,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class StopwatchActivity : AppCompatActivity() {
-    private var lastElapsedTime = getString(R.string.zero_string)
+    private lateinit var lastElapsedTime: String
     private var enabled = false
     private lateinit var mainTimer: Timer
 
@@ -17,6 +17,7 @@ class StopwatchActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_stopwatch)
         ManageBottomNavbar.setupNavbar(this@StopwatchActivity, navigation)
+        lastElapsedTime = getString(R.string.zero_string)
 
         btnMark.setOnClickListener {
             val now = System.currentTimeMillis()
