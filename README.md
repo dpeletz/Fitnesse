@@ -1,4 +1,4 @@
 # Fitnesse
-### a fitness planning Android app
+### A fitness planning Android app
 
-View a demo [here](https://www.youtube.com/watch?v=OTglx-EL1t0&feature=youtu.be)
+View a demo [here](https://www.youtube.com/watch?v=OTglx-EL1t0&feature=youtu.be).
